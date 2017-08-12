@@ -1,11 +1,12 @@
 @echo off
 
 :: Path of R installation: you can modify this value to save it permanently or specify it as parameter
-SET Rscript_dir="C:\Progra~1\R\R-3.1.3\bin\x64"
+SET Rscript_dir="C:\Progra~1\R\R-3.4.0\bin\x64"
 :: Do not modify below here!
 
 setlocal EnableDelayedExpansion
 
+set batch_path=%~dp0
 set usage=^
 MODIStsp.sh [options]^
 
@@ -41,7 +42,7 @@ if /I "%1" == "" goto Run
 if not (%1)==() goto GETOPTS
 
 :Run
-%Rscript_dir%\Rscript.exe %~dp0..\MODIStsp_launcher.R %gui% %options_File% %spatial_file_path%
+%Rscript_dir%\Rscript.exe %batch_path%..\MODIStsp_launcher.R %gui% %options_File% %spatial_file_path%
 goto End
 
 :Help
