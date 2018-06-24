@@ -2,127 +2,121 @@ context("MODIStsp_extract works as expected")
 
 test_that("MODIStsp_extract works as expected", {
 
-  # skip("Skip tests - since they rely on download they are only run
-  # locally")
-  skip_on_cran()
-  # skip_on_travis()
+      # skip("Skip tests - since they rely on download they are only run
+      # locally")
+      skip_on_cran()
+      # skip_on_travis()
 
-  ### Test 1: test of extraction on polygons                ####
-  #   The test uses tif files in testdata/VI_16Days_500m_v6 to build
-  #   a MODIStsp rasterStack, end extract data on polygons saved in
-  #   testdata/extract_polys.shp
+      ### Test 1: test of extraction on polygons                ####
+      #   The test uses tif files in testdata/VI_16Days_500m_v6 to build
+      #   a MODIStsp rasterStack, end extract data on polygons saved in
+      #   testdata/extract_polys.shp
 
-  # copy files in "inst/testdata/VI_16Days_500m_v6" to tempdir to avoid
-  # creating files outside tempdir while running the test
-  #
-  test_folder <-  system.file("testdata/VI_16Days_500m_v6/NDVI",
-                              package = "MODIStsp")
-  dir.create(file.path(tempdir(), "MODIStsp/VI_16Days_500m_v6/NDVI"),
-             showWarnings = FALSE, recursive = TRUE)
-  file.copy(list.files(test_folder, full.names = TRUE),
-            file.path(tempdir(), "MODIStsp/VI_16Days_500m_v6/NDVI"),
-            recursive = T)
+      # copy files in "inst/testdata/VI_16Days_500m_v6" to tempdir to avoid
+      # creating files outside tempdir while running the test
+      #
+      test_folder <-  system.file("testdata/VI_16Days_500m_v6/NDVI",
+                                  package = "MODIStsp")
+      dir.create(file.path(tempdir(), "MODIStsp/VI_16Days_500m_v6/NDVI"),
+                 showWarnings = FALSE, recursive = TRUE)
+      file.copy(list.files(test_folder, full.names = TRUE),
+                file.path(tempdir(), "MODIStsp/VI_16Days_500m_v6/NDVI"),
+                recursive = T)
 
-  # build and load the MODIStsp stack
+      # build and load the MODIStsp stack
 
-  opts_file <- system.file("testdata/test_extract.json",
-                           package = "MODIStsp")
-  MODIStsp(options_file = opts_file, gui = FALSE)
-  stack_file  <- list.files(
-    file.path(tempdir(),
-              "MODIStsp/VI_16Days_500m_v6/Time_Series/RData/Terra/NDVI/"
-    ),
-    full.names = TRUE)
-  ts_data <- get(load(stack_file))
+      opts_file <- system.file("testdata/test_extract.json",
+                               package = "MODIStsp")
+      MODIStsp(options_file = opts_file, gui = FALSE)
+      stack_file  <- list.files(
+        file.path(tempdir(),
+                  "MODIStsp/VI_16Days_500m_v6/Time_Series/RData/Terra/NDVI/"
+                  ),
+        full.names = TRUE)
+      ts_data <- get(load(stack_file))
 
-  # extract data - average values over polygons
+      # extract data - average values over polygons
 
-  polygons <- rgdal::readOGR(system.file("testdata/extract_polys.shp",
-                                         package = "MODIStsp"),
-                             verbose = FALSE)
-  testthat::expect_warning(
-    out_data <- MODIStsp_extract(ts_data, polygons,
-                                 id_field = "lc_type",
-                                 small = FALSE))
-  testthat::expect_is(out_data, "xts")
-  testthat::expect_equal(
-    mean(out_data, na.rm = TRUE), 4431.833, tolerance = 0.001, scale = 1)
+      polygons <- rgdal::readOGR(system.file("testdata/extract_polys.shp",
+                                             package = "MODIStsp"),
+                                 verbose = FALSE)
+      expect_warning(out_data <- MODIStsp_extract(ts_data, polygons,
+                                                  id_field = "lc_type",
+                                                  small = FALSE))
+      expect_is(out_data, "xts")
+      expect_equal(mean(out_data, na.rm = TRUE), 4431.833, tolerance = 0.001,
+                   scale = 1)
 
-  #all data for polys outside extent of raster are NaN
-  testthat::expect_equal(mean(out_data[, 9], na.rm = TRUE), NaN)
+      #all data for polys outside extent of raster are NaN
+      expect_equal(mean(out_data[, 9], na.rm = TRUE), NaN)
 
-  #chack that results are equal to raster::extract
-  testthat::expect_warning(out_rastextract <- raster::extract(ts_data,
-                                                              polygons,
-                                                              fun = mean,
-                                                              na.rm = TRUE,
-                                                              df = TRUE,
-                                                              small = TRUE))
-  testthat::expect_equal(as.numeric(out_rastextract[2,2:24]),
-                         as.numeric(out_data[,2]))
+      #chack that results are equal to raster::extract
+      expect_warning(out_rastextract <- raster::extract(ts_data,
+                                                        polygons,
+                                                        fun = mean,
+                                                        na.rm = TRUE,
+                                                        df = TRUE,
+                                                        small = TRUE))
+      expect_equal(as.numeric(out_rastextract[2,2:24]),
+                   as.numeric(out_data[,2]))
 
-  testthat::expect_equal(as.numeric(out_rastextract[6,2:24]),
-                         as.numeric(out_data[,6]))
+      expect_equal(as.numeric(out_rastextract[6,2:24]),
+                   as.numeric(out_data[,6]))
 
-  # check proper working with small == TRUE
-  testthat::expect_warning(out_data <- MODIStsp_extract(ts_data, polygons,
-                                                        id_field = "lc_type",
-                                                        small = TRUE,
-                                                        small_method = "full"))
-  #extracted data for the small polygon equal to raster::extract if
-  #small_method = "full"
-  testthat::expect_equal(as.numeric(out_rastextract[10,2:24]),
-                         as.numeric(out_data[,9]))
+      # check proper working with small == TRUE
+      expect_warning(out_data <- MODIStsp_extract(ts_data, polygons,
+                                                  id_field = "lc_type",
+                                                  small = TRUE,
+                                                  small_method = "full"))
+      #extracted data for the small polygon equal to raster::extract if
+      #small_method = "full"
+      expect_equal(as.numeric(out_rastextract[10,2:24]),
+                   as.numeric(out_data[,9]))
 
-  # extract data - number of pixels, using a different function
-  testthat::expect_warning(
-    out_data <- MODIStsp_extract(ts_data, polygons,
-                                 id_field = "lc_type",
-                                 FUN = function(x,...) length(x),
-                                 small = FALSE))
-  testthat::expect_is(out_data, "xts")
-  testthat::expect_equal(mean(out_data, na.rm = TRUE), 10.25, tolerance = 0.001,
-                         scale = 1)
-  testthat::expect_equal(as.numeric(out_data[1,]), c(25, 3, 1, 9, 6 , 13, 9, 16, NA))
+      # extract data - number of pixels, using a different function
+      expect_warning(out_data <- MODIStsp_extract(ts_data, polygons,
+                                                  id_field = "lc_type",
+                                   FUN = function(x,...) length(x),
+                                   small = FALSE))
+      expect_is(out_data, "xts")
+      expect_equal(mean(out_data, na.rm = TRUE), 10.25, tolerance = 0.001,
+                   scale = 1)
+      expect_equal(as.numeric(out_data[1,]), c(25, 3, 1, 9, 6 , 13, 9, 16, NA))
 
-  #with small == FALSE, one less column in out
-  testthat::expect_equal(dim(out_data)[2], 9)
+      #with small == FALSE, one less column in out
+      expect_equal(dim(out_data)[2], 9)
 
-  ### Test 2: test of extraction on points                ####
-  #   The test uses the same time series as before, and extract data on
-  #   centroids of the polygons
+      ### Test 2: test of extraction on points                ####
+      #   The test uses the same time series as before, and extract data on
+      #   centroids of the polygons
 
-  centroids <- rgeos::gCentroid(polygons, byid = TRUE)
-  points <- sp::SpatialPointsDataFrame(centroids,
-                                       polygons@data, match.ID = FALSE)
+      centroids <- rgeos::gCentroid(polygons, byid = TRUE)
+      points <- sp::SpatialPointsDataFrame(centroids,
+        polygons@data, match.ID = FALSE)
 
-  testthat::expect_warning(out_data <- MODIStsp_extract(ts_data,
-                                                        points,
-                                                        id_field = "lc_type"))
-  testthat::expect_equal(mean(out_data, na.rm = T), 4757.042, tolerance = 0.001,
-                         scale = 1)
+      expect_warning(out_data <- MODIStsp_extract(ts_data,
+                                                  points,
+                                                  id_field = "lc_type"))
+      expect_equal(mean(out_data, na.rm = T), 4757.042, tolerance = 0.001,
+                   scale = 1)
 
-  # redo without specifying a column for extraction, and compare wrt
-  # raster::extract
+      # redo without specifying a column for extraction, and compare wrt
+      # raster::extract
 
-  #subset on dates
-  testthat::expect_warning(out_data <- MODIStsp_extract(
-    ts_data, points,
-    start_date = "2016-07-01",
-    end_date = "2016-08-01",
-    out_format = "dframe"))
-  testthat::expect_equal(length(out_data[,1]), 2)
-  testthat::expect_equal(mean(out_data[,2], na.rm = T), 858, tolerance = 0.001,
-                         scale = 1)
-  #compare again with raster::extract
-  testthat::expect_warning(
-    out_rastextract <- raster::extract(ts_data[[13:14]],
-                                       points, fun = mean,
-                                       na.rm = TRUE,
-                                       df = TRUE)
-  )
-
-  testthat::expect_equal(as.numeric(out_data[,2]),
-                         as.numeric(out_rastextract[1, 2:3]))
+      #subset on dates
+      expect_warning(out_data <- MODIStsp_extract(ts_data, points,
+                                   start_date = "2016-07-01",
+                                   end_date = "2016-08-01",
+                                   out_format = "dframe"))
+      expect_equal(length(out_data[,1]), 2)
+      expect_equal(mean(out_data[,2], na.rm = T), 858, tolerance = 0.001,
+                   scale = 1)
+      #compare again with raster::extract
+      expect_warning(out_rastextract <- raster::extract(ts_data[[13:14]],
+                                                        points, fun = mean,
+                                                        na.rm = TRUE,
+                                                        df = TRUE))
+      expect_equal(as.numeric(out_data[,2]),
+                   as.numeric(out_rastextract[1, 2:3]))
 
 })
