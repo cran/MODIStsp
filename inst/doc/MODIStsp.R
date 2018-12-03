@@ -1,6 +1,6 @@
 ## ---- eval=FALSE, message=FALSE, warning=FALSE, include=TRUE-------------
 #  library(devtools)
-#  install_github("lbusett/MODIStsp")
+#  install_github("ropensci/MODIStsp")
 
 ## ---- eval=FALSE, message=FALSE, warning=FALSE, include=TRUE-------------
 #  install.packages("gWidgetsRGtk2")
@@ -11,7 +11,7 @@
 
 ## ---- eval=FALSE, message=FALSE, warning=FALSE, include=TRUE-------------
 #  library(devtools)
-#  install_github("lbusett/MODIStsp")
+#  install_github("ropensci/MODIStsp")
 
 ## ----eval = FALSE--------------------------------------------------------
 #  library(RGtk2)
@@ -22,7 +22,7 @@
 
 ## ----eval = FALSE--------------------------------------------------------
 #  library(devtools)
-#  install_github("lbusett/MODIStsp", ref = "master")
+#  install_github("ropensci/MODIStsp", ref = "master")
 #  MODIStsp()
 
 ## ---- eval=FALSE, message=FALSE, warning=FALSE, include=TRUE, caption=FALSE----
