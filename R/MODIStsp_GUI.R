@@ -170,7 +170,10 @@ MODIStsp_GUI <- function(general_opts,
     text = paste0("Product Info (www)"),
     container = satprod0_group,
     handler   = function(h, ...) {
-      utils::browseURL(sel_prodopts[[svalue(wids$vers)]][["www"]])
+      curr_prod     <- gWidgets::svalue(wids$prod)
+      curr_vers     <- gWidgets::svalue(wids$vers)
+      curr_opts     <- prod_opt_list[[curr_prod]]
+      utils::browseURL(curr_opts[[curr_vers]][["www"]])
     }
   )
   gWidgets::font(www_but) <- list(family = "serif", weight = "bold",
@@ -804,7 +807,7 @@ MODIStsp_GUI <- function(general_opts,
     handler   = function(h, ...) {
 
       choice <- warn_projmess1()
-      if (choice){
+      if (choice) {
         old_proj <- gWidgets::svalue(wids$output_proj4)
         selproj <- ginput(
           paste("Please insert a valid proj4string,",

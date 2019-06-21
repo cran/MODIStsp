@@ -236,7 +236,7 @@ MODIStsp_process_bands <- function(out_folder_mod, modislist,
           c(max(x[1],y[1]), max(x[2],y[2]), min(x[3],y[3]), min(x[4],y[4]))
         },
         list(
-          reproj_bbox(bbox, outproj_str, mod_proj_str, enlarge=TRUE),
+          reproj_bbox(bbox, outproj_str, mod_proj_str, enlarge = TRUE),
           bbox(raster::raster(outfile_vrt_prev2))
         )
       )
@@ -336,14 +336,15 @@ MODIStsp_process_bands <- function(out_folder_mod, modislist,
   # when working with GDAL > 2.3.x
   if (gdalutils_ver >= 2.3 & tools::file_ext(outfile_vrt) == "vrt") {
     vrt_in      <- readLines(outfile_vrt)
+
     scale_line <- grep("Scale", vrt_in)
     if (length(scale_line) != 0) {
-      vrt_in[[scale_line]] <- "<Scale>1</Scale>"
+      vrt_in[scale_line] <- "<Scale>1</Scale>"
     }
 
     offset_line <- grep("Offset", vrt_in)
     if (length(offset_line) != 0) {
-      vrt_in[[offset_line]] <- "<Offset>0</Offset>"
+      vrt_in[offset_line] <- "<Offset>0</Offset>"
     }
 
     writeLines(vrt_in, outfile_vrt)
@@ -398,7 +399,7 @@ MODIStsp_process_bands <- function(out_folder_mod, modislist,
              ot       = datatype,
              a_nodata = nodata_out,
              co = paste("COMPRESS", compress, sep = "="),
-             overwrite = TRUE, verbose = T
+             overwrite = TRUE, verbose = FALSE
            ),
            Resample0_Resize0 = gdalUtils::gdalwarp(
              outfile_vrt, outrep_file_0,
