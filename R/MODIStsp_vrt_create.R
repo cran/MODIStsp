@@ -19,10 +19,10 @@
 #' @author Lorenzo Busetto, phD (2014-2017) \email{lbusett@@gmail.com}
 #' @author Luigi Ranghetti, phD (2015) \email{ranghetti.l@@irea.cnr.it}
 #' @note License: GPL 3.0
-#' @importFrom raster setZ stack
-#' @importFrom tools file_path_sans_ext
 #' @importFrom stringr str_sub str_detect
-#' @importFrom gdalUtils gdalbuildvrt
+#' @importFrom raster raster stack nlayers setZ
+#' @importFrom tools file_path_sans_ext
+#' @importFrom gdalUtilities gdalbuildvrt
 #'
 MODIStsp_vrt_create <- function(
   sensor,
@@ -64,6 +64,12 @@ MODIStsp_vrt_create <- function(
     nodata_vals <- c(nodata_out[which(bandsel == 1)],
                      indexes_nodata_out[which(indexes_bandsel == 1)],
                      quality_nodata_out[which(quality_bandsel == 1)])
+
+
+    if (basename(out_prod_folder) == "MAIA_Land_Surf_BRF_500") {
+      warning("Creation of Time Series files for product MAIA_Land_Surf_BRF_500 is currently not possible!")
+      return()
+    }
 
     for (mb in seq_along(meta_bands)) {
 
@@ -251,7 +257,7 @@ MODIStsp_vrt_create <- function(
                                                          "GDAL.vrt",
                                                          sep = "_"))
 
-              gdalUtils::gdalbuildvrt(out_meta_files, meta_filename,
+              gdalUtilities::gdalbuildvrt(out_meta_files, meta_filename,
                                       separate = TRUE,
                                       srcnodata = nodata_value,
                                       vrtnodata = nodata_value)
@@ -268,8 +274,19 @@ MODIStsp_vrt_create <- function(
               dir.create(meta_dir, showWarnings = FALSE, recursive = TRUE)
 
               # create stack. Use "quick" since already sure about alignment !
+              # raster_ts <- raster::stack(lapply(out_meta_files,
+              #                                   FUN = function(x) {
+              #                                     rst <- raster::stack(x)
+              #
+              #                                     rst}),
+              #                            quick = TRUE)
               raster_ts <- raster::stack(out_meta_files, quick = TRUE)
+
               # Add the "time" dimension to the rasterstack
+              if (raster::nlayers(raster_ts) != length(temp_dates)) {
+                temp_dates <- rep(temp_dates,
+                                  each = raster::nlayers(raster_ts) / length(temp_dates))
+              }
               raster_ts <- raster::setZ(raster_ts, temp_dates, name = "time")
               RData_filename <- file.path(meta_dir, paste(file_prefix,
                                                           meta_band,

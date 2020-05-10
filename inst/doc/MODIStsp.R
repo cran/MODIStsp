@@ -1,26 +1,26 @@
-## ---- eval=FALSE, message=FALSE, warning=FALSE, include=TRUE-------------
+## ---- eval=FALSE, message=FALSE, warning=FALSE, include=TRUE------------------
 #  library(devtools)
 #  install_github("ropensci/MODIStsp")
 
-## ---- eval=FALSE, message=FALSE, warning=FALSE, include=TRUE-------------
+## ---- eval=FALSE, message=FALSE, warning=FALSE, include=TRUE------------------
 #  install.packages("gWidgetsRGtk2")
 #  library(gWidgetsRGtk2)
 
-## ---- eval=FALSE, message=FALSE, warning=FALSE, include=TRUE-------------
+## ---- eval=FALSE, message=FALSE, warning=FALSE, include=TRUE------------------
 #  install.packages("MODIStsp")
 
-## ---- eval=FALSE, message=FALSE, warning=FALSE, include=TRUE-------------
+## ---- eval=FALSE, message=FALSE, warning=FALSE, include=TRUE------------------
 #  library(devtools)
 #  install_github("ropensci/MODIStsp")
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  library(RGtk2)
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  install.packages("MODIStsp")
 #  MODIStsp()
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  library(devtools)
 #  install_github("ropensci/MODIStsp", ref = "master")
 #  MODIStsp()
@@ -48,7 +48,7 @@
   img <- readPNG('NEWIND_GUI.png')
   grid.raster(img)
 
-## ----eval=FALSE, message=FALSE, warning=FALSE----------------------------
+## ----eval=FALSE, message=FALSE, warning=FALSE---------------------------------
 #  library(MODIStsp)
 #  
 #  # **NOTE** Output files of examples are saved to file.path(tempdir(), "MODIStsp").
@@ -73,7 +73,7 @@
 #  list.files(file.path(out_fold ,"EVI"))
 #  #> [1] "MOD13A2_EVI_2016_161.tif" "MOD13A2_EVI_2016_177.tif"
 
-## ----eval=FALSE, message=FALSE, warning=FALSE----------------------------
+## ----eval=FALSE, message=FALSE, warning=FALSE---------------------------------
 #  
 #  opts_files <- c(system.file("testdata/test_MOD13A2.json", package = "MODIStsp"),
 #                  system.file("testdata/test_MOD10A2.json", package = "MODIStsp"))
@@ -98,7 +98,7 @@
 #  #> [1] "MOD11A2_LST_Night_1km_2016_153.tif" "MOD11A2_LST_Night_1km_2016_161.tif"
 #  #> [3] "MOD11A2_LST_Night_1km_2016_169.tif" "MOD11A2_LST_Night_1km_2016_177.tif"
 
-## ----eval=FALSE, message=FALSE, warning=FALSE----------------------------
+## ----eval=FALSE, message=FALSE, warning=FALSE---------------------------------
 #  
 #  # Run the tool using the settings previously saved in a specific option file
 #  # and specifying the extent from a spatial file allows to re-use the same
@@ -140,16 +140,16 @@
 #  plot(raster(outfiles_iseo[1]))
 #  
 
-## ----eval=FALSE, tidy=TRUE, highlight=TRUE-------------------------------
+## ----eval=FALSE, tidy=TRUE, highlight=TRUE------------------------------------
 #  library(raster)
 #  modistsp_file <- "/my_outfolder/EVI/MOD13Q1_2005_137_EVI.tif"
 #  my_raster     <- raster(modistsp_file)
 
-## ----eval=FALSE----------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  in_virtual_file <- "/my_outfolder/Time_Series/RData/Terra/EVI/MOD13Q1_MYD13Q1_NDVI_49_2000_353_2015_RData.RData"
 #  indata          <- get(load(in_virtual_file))
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #    #Set the input paths to raster and shape file
 #    infile    <- 'myoutfolder/Time_Series/RData/Mixed/MOD13Q1_MYD13Q1_NDVI_49_2000_353_2015_RData.RData'
 #    shpname   <- 'path_to_file/rois.shp'

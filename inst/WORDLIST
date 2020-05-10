@@ -25,12 +25,11 @@ cnr
 CNR
 codecov
 coercible
-Commandline
 computable
 Critchlow
 cron
 crontab
-CRS
+crs
 DAAC
 dat
 datatypes
@@ -67,7 +66,10 @@ fullscreen
 gdal
 GDAL
 gdalinfo
+gdaltranslate
+gdalUtilities
 gdalUtils
+gdalwarp
 Geosciences
 Geospatial
 GeoTiff
@@ -145,13 +147,10 @@ nodata
 Nodata
 NoData
 NODATA
-OGG
-OGR
-ogrinfo
-OSGeo
 OSX
 packages’
 PACKBITS
+pacman
 Pango
 phD
 pkgdown
@@ -168,7 +167,6 @@ proj
 Proj
 PROJ
 qc
-QGIS
 QI
 QIs
 ranghetti
@@ -194,6 +192,7 @@ rescaled
 rescaling
 resetindexes
 rgdal
+rgeos
 RGRI
 RGtk
 ropensci
@@ -235,6 +234,8 @@ UInt
 urs
 usr
 vrt
+WKT
+WKTs
 writeRaster
 xmax
 xmin

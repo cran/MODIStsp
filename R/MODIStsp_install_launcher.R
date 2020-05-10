@@ -11,12 +11,12 @@
 #'  otherwise the links would continue to point to the old package version!
 #' @param bin_dir
 #'  - on Linux, directory in which the link to the bash script should be
-#'    placed, Default: /usr/bin - use of a path included in the PATH environment variable is
+#'    placed, Default: "/usr/bin" - use of a path included in the PATH environment variable is
 #'    suggested;
 #'  - on Windows, directory where to place the menu entry in the Start Menu,
 #'    Default: Start Menu -> Programs -> MODIStsp.
-#' @param rscript_dir 'character' in Windows only, the path of the directory in which
-#'  Rscript is installed (default is "C:/Progra~1/R/R-<version>/bin/<arch>").
+#' @param rscript_dir `character` in Windows only, the path of the directory in which
+#'  Rscript is installed (usually is \"C:/Progra~1/R/R-`version`/bin/`x64`").
 #'  Edit this parameter if R is installed in a custom directory.
 #' @param desktop_shortcut `logical` indicates if the desktop entry or the
 #'  desktop shortcut should be created, Default: TRUE.
@@ -39,18 +39,21 @@
 #' # desktop entry in /usr/share/applications)
 #' # (requires administrator permissions)
 #' \dontrun{
+#' # the administrator password is asked interactively
 #' install_MODIStsp_launcher(sudo = TRUE)
-#'   # the administrator password is asked interactively}
+#' }
 #'
 #' # Linux: installation in a directory which does not require administrator
 #' # permissions
 #' \dontrun{
-#' install_MODIStsp_launcher(bin_dir = "~/bin"), desktop_dir = "~/Desktop"}
+#' install_MODIStsp_launcher(bin_dir = "~/bin", desktop_dir = "~/Desktop")
+#' }
 #'
 #' # Windows: common installation
 #' # (script in the Start Menu and shortcut on the desktop)
 #' \dontrun{
-#' install_MODIStsp_launcher()}
+#' install_MODIStsp_launcher()
+#' }
 
 install_MODIStsp_launcher <- function(bin_dir          = NA,
                                       rscript_dir      = NA,
