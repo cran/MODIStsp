@@ -1,10 +1,7 @@
 ## ---- eval=FALSE, message=FALSE, warning=FALSE, include=TRUE------------------
-#  library(devtools)
+#  install.packages("remotes")
+#  library(remotes)
 #  install_github("ropensci/MODIStsp")
-
-## ---- eval=FALSE, message=FALSE, warning=FALSE, include=TRUE------------------
-#  install.packages("gWidgetsRGtk2")
-#  library(gWidgetsRGtk2)
 
 ## ---- eval=FALSE, message=FALSE, warning=FALSE, include=TRUE------------------
 #  install.packages("MODIStsp")
@@ -13,132 +10,147 @@
 #  library(devtools)
 #  install_github("ropensci/MODIStsp")
 
-## ----eval = FALSE-------------------------------------------------------------
-#  library(RGtk2)
-
-## ----eval = FALSE-------------------------------------------------------------
+## ---- eval=FALSE, message=FALSE, warning=FALSE, include=TRUE------------------
 #  install.packages("MODIStsp")
-#  MODIStsp()
 
-## ----eval = FALSE-------------------------------------------------------------
+## ---- eval=FALSE, message=FALSE, warning=FALSE, include=TRUE------------------
 #  library(devtools)
-#  install_github("ropensci/MODIStsp", ref = "master")
-#  MODIStsp()
+#  install_github("ropensci/MODIStsp")
 
 ## ---- eval=FALSE, message=FALSE, warning=FALSE, include=TRUE, caption=FALSE----
 #  library(MODIStsp)
 #  MODIStsp()
 
-## ----GUIfig, echo=FALSE, fig.align="center", fig.heigth=7.5, message=FALSE, warning=FALSE----
+## ----GUIfig, echo=FALSE, fig.align="center", fig.width=10, message=FALSE, warning=FALSE----
   library(png)
   library(grid)
   library(knitr)
-  img <- readPNG("MAIN_GUI.png")
+  img <- readPNG("GUI_1.PNG")
   grid.raster(img)
 
-## ----proc_layers, echo=FALSE, fig.align="center", message=FALSE, warning=FALSE, paged.print=FALSE----
-  library(png)
-  library(grid)
-  img <- readPNG('SELECT_GUI.png')
-  grid.raster(img)
+## ----echo=TRUE, message=FALSE, warning=FALSE----------------------------------
+library(MODIStsp) 
+MODIStsp_get_prodlayers("M*D13Q1")
 
-## ----indexfig, echo=FALSE, fig.height=2.3, fig.width=6, message=FALSE, warning=FALSE, fig.align="center"----
-  library(png)
-  library(grid)
-  img <- readPNG('NEWIND_GUI.png')
-  grid.raster(img)
+## ----echo=TRUE, message=FALSE, warning=FALSE----------------------------------
+library(MODIStsp) 
 
-## ----eval=FALSE, message=FALSE, warning=FALSE---------------------------------
-#  library(MODIStsp)
-#  
-#  # **NOTE** Output files of examples are saved to file.path(tempdir(), "MODIStsp").
-#  # You can run the examples with `gui = TRUE` to set a different output folder!
-#  
-#  # --> Specify the path to a valid options file saved in advance from MODIStsp GUI
-#  # Here we use a test json file saved in MODIStsp installation folder which
-#  # downloads and processed 3 MOD13A2 images over the Como Lake (Lombardy, Italy)
-#  # and retrieves NDVI and EVI data, plus the Usefulness Index Quality Indicator.
-#  
-#  options_file <- system.file("testdata/test_MOD13A2.json", package = "MODIStsp")
-#  
-#  # --> Launch the processing
-#  MODIStsp(gui = FALSE, options_file = options_file, verbose = FALSE)
-#  
-#  # Outputs are in this case in subfolder "MODIStsp/VI_16Days_1Km_v6" of `base::tempdir()`:
-#  
-#  out_fold <- file.path(tempdir(), "MODIStsp/VI_16Days_1Km_v6")
-#  list.files(out_fold)
-#  #> [1] "EVI"         "NDVI"        "QA_usef"     "Time_Series"
-#  
-#  list.files(file.path(out_fold ,"EVI"))
-#  #> [1] "MOD13A2_EVI_2016_161.tif" "MOD13A2_EVI_2016_177.tif"
+# **NOTE** Output files of examples are saved to file.path by setting out_folder to $tempdir.
 
-## ----eval=FALSE, message=FALSE, warning=FALSE---------------------------------
-#  
-#  opts_files <- c(system.file("testdata/test_MOD13A2.json", package = "MODIStsp"),
-#                  system.file("testdata/test_MOD10A2.json", package = "MODIStsp"))
-#  
-#  for (opts_file in opts_files) {
-#    MODIStsp(gui = FALSE, options_file = opts_file)
-#  }
-#  
-#  # MOD13A2 ouputs
-#  out_fold <- file.path(tempdir(), "MODIStsp/VI_16Days_1Km_v6")
-#  list.files(out_fold)
-#  #> [1] "EVI"         "NDVI"        "QA_usef"     "Time_Series"
-#  list.files(file.path(out_fold ,"EVI"))
-#  #> [1] "MOD13A2_EVI_2016_161.tif" "MOD13A2_EVI_2016_177.tif"
-#  
-#  # MOD10A2 ouputs
-#  out_fold <- file.path(tempdir(), "MODIStsp/Surf_Temp_8Days_1Km_v6")
-#  list.files(out_fold)
-#  #> [1] "Days_Clear"    "LST_Day_1km"   "LST_Night_1km" "Time_Series"
-#  
-#  list.files(file.path(out_fold ,"LST_Night_1km"))
-#  #> [1] "MOD11A2_LST_Night_1km_2016_153.tif" "MOD11A2_LST_Night_1km_2016_161.tif"
-#  #> [3] "MOD11A2_LST_Night_1km_2016_169.tif" "MOD11A2_LST_Night_1km_2016_177.tif"
+# --> See name and available layers for product M*D13Q1
+# MODIStsp_get_prodlayers("M*D13A2")
 
-## ----eval=FALSE, message=FALSE, warning=FALSE---------------------------------
-#  
-#  # Run the tool using the settings previously saved in a specific option file
-#  # and specifying the extent from a spatial file allows to re-use the same
-#  # processing settings to perform download and reprocessing on a different area
-#  library(MODIStsp)
-#  options_file <- system.file("testdata/test_MOD13A2.json", package = "MODIStsp")
-#  spatial_file <- system.file("testdata/lakeshapes/garda_lake.shp", package = "MODIStsp")
-#  MODIStsp(gui = FALSE, options_file = options_file,
-#           spatial_file_path = spatial_file, verbose = FALSE)
-#  
-#  # --> Create a character array containing a list of shapefiles (or other spatial files)
-#  extent_list = list.files(system.file("testdata/lakeshapes/", package = "MODIStsp"),
-#                           full.names = TRUE, "\\.shp$")
-#  extent_list
-#  
-#  #> [1] "D:/Documents/Source/git/MODIStsp/inst/testdata/lakeshapes/garda_lake.shp"
-#  #> [2] "D:/Documents/Source/git/MODIStsp/inst/testdata/lakeshapes/iseo_lake.shp"
-#  
-#  # --> Loop on the list of spatial files and run MODIStsp using each of them to
-#  # automatically define the output extent (A separate output folder is created for
-#  # each input spatial file).
-#  
-#  for (single_shape in extent_list) {
-#    MODIStsp(gui = FALSE, options_file = options_file,
-#             spatial_file_path = single_shape )
-#  }
-#  
-#  # output files are placed in separate folders. For example here you can see how to
-#  # access a list of produced files and plot one of them:
-#  outfiles_garda <- list.files(
-#    file.path(tempdir(), "MODIStsp/garda_lake/VI_16Days_1Km_v6/EVI"),
-#    full.names = TRUE)
-#  library(raster)
-#  plot(raster(outfiles_garda[1]))
-#  
-#  outfiles_iseo <- list.files(
-#    file.path(tempdir(), "MODIStsp/iseo_lake/VI_16Days_1Km_v6/EVI"),
-#    full.names = TRUE)
-#  plot(raster(outfiles_iseo[1]))
-#  
+# --> Launch the processing
+MODIStsp(gui             = FALSE, 
+         out_folder      = "$tempdir", 
+         selprod         = "Vegetation_Indexes_16Days_1Km (M*D13A2)",
+         bandsel         = c("EVI", "NDVI"), 
+         quality_bandsel = "QA_usef", 
+         indexes_bandsel = "SR", 
+         user            = "mstp_test" ,
+         password        = "MSTP_test_01",
+         start_date      = "2020.06.01", 
+         end_date        = "2020.06.15", 
+         verbose         = FALSE)
+
+# Outputs are in this case in subfolder "MODIStsp/VI_16Days_1Km_v6" of 
+# `base::tempdir()`: 
+
+out_fold <- file.path(tempdir(), "MODIStsp/VI_16Days_1Km_v6/") 
+list.files(out_fold)
+list.files(file.path(out_fold ,"EVI"))
+list.files(file.path(out_fold ,"QA_usef"))
+
+## ----echo=TRUE, message=FALSE, warning=FALSE----------------------------------
+library(MODIStsp) 
+
+# **NOTE** Output files of examples are saved to file.path(tempdir(), "MODIStsp").
+
+# --> Specify the path to a valid options file saved in advance from MODIStsp GUI 
+# Here we use a test json file saved in MODIStsp installation folder which
+# downloads and processed 3 MOD13A2 images over the Como Lake (Lombardy, Italy)
+# and retrieves NDVI and EVI data, plus the Usefulness Index Quality Indicator.
+
+opts_file <- system.file("testdata/test_MOD13A2.json", package = "MODIStsp")
+
+# --> Launch the processing
+MODIStsp(gui = FALSE, opts_file = opts_file, verbose = FALSE)
+
+# Outputs are in this case in subfolder "MODIStsp/VI_16Days_1Km_v6" of 
+# `base::tempdir()`: 
+
+out_fold <- file.path(tempdir(), "MODIStsp/VI_16Days_1Km_v6") 
+list.files(out_fold)
+list.files(file.path(out_fold ,"EVI"))
+
+## ----echo=TRUE, message=FALSE, warning=FALSE----------------------------------
+
+opts_files <- c(system.file("testdata/test_MOD13A2.json", package = "MODIStsp"), 
+                system.file("testdata/test_MOD10A2.json", package = "MODIStsp"))
+
+for (opts_file in opts_files) {
+  MODIStsp(gui       = FALSE, 
+           opts_file = opts_file, 
+           verbose   = FALSE)
+}
+
+# MOD13A2 ouptuts
+out_fold <- file.path(tempdir(), "MODIStsp/VI_16Days_1Km_v6") 
+list.files(out_fold)
+list.files(file.path(out_fold ,"NDVI"))
+
+# MOD10A2 ouptuts
+out_fold <- file.path(tempdir(), "MODIStsp/Surf_Temp_8Days_1Km_v6") 
+list.files(out_fold)
+list.files(file.path(out_fold ,"LST_Night_1km"))
+
+## ----echo=TRUE, message=FALSE, warning=FALSE----------------------------------
+# Run the tool using the settings previously saved in a specific option file
+# and specifying the extent from a spatial file allows to re-use the same
+# processing settings to perform download and reprocessing on a different area
+library(MODIStsp) 
+opts_file    <- system.file("testdata/test_MOD13A2.json", package = "MODIStsp")
+spatial_file <- system.file("testdata/lakeshapes/garda_lake.shp", package = "MODIStsp")
+MODIStsp(gui       = FALSE, 
+         opts_file = opts_file,
+         spatmeth  = "file", 
+         spafile   = spatial_file, 
+         verbose   = FALSE)
+
+# --> Create a character array containing a list of shapefiles (or other spatial files)
+extent_list <- list.files(system.file("testdata/lakeshapes/", package = "MODIStsp"), full.names = TRUE, "\\.shp$")  
+
+extent_list
+
+# --> Loop on the list of spatial files and run MODIStsp using each of them to 
+# automatically define the output extent (A separate output folder is created for
+# each input spatial file).
+
+for (single_shape in extent_list) {
+  MODIStsp(gui       = FALSE, 
+           opts_file = opts_file, 
+           spatmeth  = "file", 
+           spafile   = single_shape, 
+           verbose   = FALSE)
+}
+
+# output files are placed in separate folders: 
+
+outfiles_garda <- list.files(
+  file.path(tempdir(), "MODIStsp/garda_lake/VI_16Days_1Km_v6/EVI"),
+  full.names = TRUE)
+outfiles_garda
+
+library(raster)       
+plot(raster(outfiles_garda[1]))
+
+outfiles_iseo <- list.files(
+  file.path(tempdir(), "MODIStsp/iseo_lake/VI_16Days_1Km_v6/EVI"),
+  full.names = TRUE)
+outfiles_iseo
+
+plot(raster(outfiles_iseo[1]))
+
 
 ## ----eval=FALSE, tidy=TRUE, highlight=TRUE------------------------------------
 #  library(raster)
