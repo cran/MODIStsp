@@ -2,7 +2,7 @@ Package: MODIStsp
 Title: A Tool for Automating Download and Preprocessing of MODIS Land
         Products Data
 Type: Package
-Version: 2.0.3
+Version: 2.0.4
 Authors@R: c(person("Lorenzo", "Busetto", email = "lbusett@gmail.com", role = c("aut", "cre"),
     comment = c(ORCID = '0000-0001-9634-6038')), 
     person("Luigi", "Ranghetti", email = "ranghetti.l@irea.cnr.it", role = c("aut"), 
@@ -47,7 +47,7 @@ RoxygenNote: 7.1.1
 Encoding: UTF-8
 Language: en-US
 NeedsCompilation: no
-Packaged: 2020-09-18 14:40:30 UTC; lb
+Packaged: 2020-10-12 15:55:52 UTC; LB_laptop
 Author: Lorenzo Busetto [aut, cre] (<https://orcid.org/0000-0001-9634-6038>),
   Luigi Ranghetti [aut] (<https://orcid.org/0000-0001-6207-5188>),
   Leah Wasser [rev] (Leah Wasser reviewed the package for rOpenSci, see
@@ -56,4 +56,4 @@ Author: Lorenzo Busetto [aut, cre] (<https://orcid.org/0000-0001-9634-6038>),
     https://github.com/ropensci/software-review/issues/184)
 Maintainer: Lorenzo Busetto <lbusett@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-09-20 15:40:03 UTC
+Date/Publication: 2020-10-13 12:40:07 UTC
