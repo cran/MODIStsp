@@ -22,8 +22,8 @@
 #' @inheritParams MODIStsp
 #' @return NULL - the function is called for its side effects
 #'
-#' @author Lorenzo Busetto, phD (2014-2017) \email{lbusett@@gmail.com}
-#' @author Luigi Ranghetti, phD (2015) \email{ranghetti.l@@irea.cnr.it}
+#' @author Lorenzo Busetto, phD (2014-2017)
+#' @author Luigi Ranghetti, phD (2015) \email{luigi@@ranghetti.info}
 #' @note License: GPL 3.0
 #' @importFrom stringr str_sub str_detect
 #' @importFrom raster raster stack nlayers setZ
@@ -166,7 +166,7 @@ MODIStsp_vrt_create <- function(
             # __________________________________________________________________
             # Write the ENVI meta file if needed                            ####
             #
-            if (any(stringr::str_detect(ts_format, "ENVI Meta"))) {
+            if (any(stringr::str_detect(lapply(ts_format, tolower), "envi meta"))) {
 
               if (out_format == "ENVI") {
 
@@ -249,7 +249,7 @@ MODIStsp_vrt_create <- function(
             #   ________________________________________________________________
             #   # Write the GDAL vrt file if needed                         ####
             #
-            if (any(stringr::str_detect(ts_format, "GDAL vrt"))) {
+            if (any(stringr::str_detect(lapply(ts_format, tolower), "gdal vrt"))) {
 
               meta_dir <- file.path(out_prod_folder, "Time_Series", "GDAL",
                                     sens_sel,
@@ -263,7 +263,7 @@ MODIStsp_vrt_create <- function(
                                                          sep = "_"))
 
               if (length(split_nodata_values(nodata_value)[[1]]) == 1) {
-
+                
               gdalUtilities::gdalbuildvrt(out_meta_files, meta_filename,
                                       separate = TRUE,
                                       srcnodata = nodata_value,
@@ -278,7 +278,7 @@ MODIStsp_vrt_create <- function(
             #   ________________________________________________________________
             #   Create RasterStacks if needed                               ####
             #
-            if (any(stringr::str_detect(ts_format, "R rasterStack"))) {
+            if (any(stringr::str_detect(lapply(ts_format, tolower), "rasterstack"))) {
 
               meta_dir <- file.path(out_prod_folder, "Time_Series", "RData",
                                     sens_sel, meta_band)

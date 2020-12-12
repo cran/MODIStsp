@@ -16,15 +16,15 @@
 #'   environment or not. If not, processing messages are sent to a log file
 #'   instead than to the console/GTK progress windows.
 #' @param out_folder_mod  `character` output folder for MODIS HDF storage
-#' @return `character arraay` listing all available folders (a.k.a. dates) for
+#' @return `character array` listing all available folders (a.k.a. dates) for
 #'   the requested MODIS product on lpdaac http archive, for the years
 #'   included in the time range selected for processing.
 #' @author Original code by Babak Naimi (\code{.getModisList}, in
 #' \href{http://r-gis.net/?q=ModisDownload}{ModisDownload.R})
 #' modified to adapt it to MODIStsp scheme and to http archive (instead than old
 #' FTP) by:
-#' @author Lorenzo Busetto, phD (2014-2017) \email{busetto.l@@irea.cnr.it}
-#' @author Luigi Ranghetti, phD (2016-2017) \email{lbusett@@gmail.com}
+#' @author Lorenzo Busetto, phD (2014-2017)
+#' @author Luigi Ranghetti, phD (2016-2017) \email{luigi@@ranghetti.info}
 #' @note License: GPL 3.0
 #' @importFrom stringr str_sub str_split
 #' @importFrom httr RETRY authenticate content

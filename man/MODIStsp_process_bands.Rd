@@ -29,11 +29,13 @@ MODIStsp_process_bands(
   resampling,
   nodata_change,
   gui,
-  verbose
+  verbose,
+  parallel
 )
 }
 \arguments{
-\item{out_folder_mod}{\code{character} Output folder for original HDF storage, default: $tempdir}
+\item{out_folder_mod}{\code{character} Output folder for original HDF storage.
+If \code{"$tempdir"} (default), a temporary directory is used.}
 
 \item{modislist}{\verb{character array} List of MODIS images to be downloaded for
 the selected date (as returned from \code{get_mod_filenames}). Can be a single
@@ -105,6 +107,13 @@ processing parameters are retrieved from the provided \code{opts_file}
 argument), Default: TRUE}
 
 \item{verbose}{\code{logical} If FALSE, suppress processing messages, Default: TRUE}
+
+\item{parallel}{\code{logical} If TRUE, the function is run using parallel
+processing, to speed-up the computation for large rasters (with a maximum
+of 8 cores).
+The number of cores is automatically determined; specifying it is also
+possible (e.g. \code{parallel = 4}). In this case, more than 8 cores can be
+specified. If FALSE (default), single core processing is used.}
 }
 \value{
 The function is called for its side effects
@@ -116,7 +125,7 @@ mosaicing, computation of scaling factors). The function is based on the
 use of \code{gdal} routines.
 }
 \author{
-Lorenzo Busetto, phD (2014-2017) \email{lbusett@gmail.com}
+Lorenzo Busetto, phD (2014-2017)
 
-Luigi Ranghetti, phD (2015) \email{ranghetti.l@irea.cnr.it}
+Luigi Ranghetti, phD (2015) \email{luigi@ranghetti.info}
 }

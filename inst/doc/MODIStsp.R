@@ -41,17 +41,20 @@
 #  # MODIStsp_get_prodlayers("M*D13A2")
 #  
 #  # --> Launch the processing
-#  MODIStsp(gui             = FALSE,
-#           out_folder      = "$tempdir",
-#           selprod         = "Vegetation_Indexes_16Days_1Km (M*D13A2)",
-#           bandsel         = c("EVI", "NDVI"),
-#           quality_bandsel = "QA_usef",
-#           indexes_bandsel = "SR",
-#           user            = "mstp_test" ,
-#           password        = "MSTP_test_01",
-#           start_date      = "2020.06.01",
-#           end_date        = "2020.06.15",
-#           verbose         = FALSE)
+#  MODIStsp(
+#    gui             = FALSE,
+#    out_folder      = "$tempdir",
+#    selprod         = "Vegetation_Indexes_16Days_1Km (M*D13A2)",
+#    bandsel         = c("EVI", "NDVI"),
+#    quality_bandsel = "QA_usef",
+#    indexes_bandsel = "SR",
+#    user            = "mstp_test" ,
+#    password        = "MSTP_test_01",
+#    start_date      = "2020.06.01",
+#    end_date        = "2020.06.15",
+#    verbose         = FALSE,
+#    parallel        = FALSE
+#  )
 #  
 #  # Outputs are in this case in subfolder "MODIStsp/VI_16Days_1Km_v6" of
 #  # `base::tempdir()`:
@@ -74,10 +77,10 @@
 #  opts_file <- system.file("testdata/test_MOD13A2.json", package = "MODIStsp")
 #  
 #  # --> Launch the processing
-#  MODIStsp(gui = FALSE, opts_file = opts_file, verbose = FALSE)
+#  MODIStsp(gui = FALSE, opts_file = opts_file, verbose = FALSE, parallel = FALSE)
 #  
 #  # Outputs are in this case in subfolder "MODIStsp/VI_16Days_1Km_v6" of
-#  # `base::tempdir()`:
+#  # tempdir():
 #  
 #  out_fold <- file.path(tempdir(), "MODIStsp/VI_16Days_1Km_v6")
 #  list.files(out_fold)
@@ -89,9 +92,7 @@
 #                  system.file("testdata/test_MOD10A2.json", package = "MODIStsp"))
 #  
 #  for (opts_file in opts_files) {
-#    MODIStsp(gui       = FALSE,
-#             opts_file = opts_file,
-#             verbose   = FALSE)
+#    MODIStsp(gui = FALSE, opts_file = opts_file, verbose = FALSE, parallel = FALSE)
 #  }
 #  
 #  # MOD13A2 ouptuts
@@ -111,11 +112,14 @@
 #  library(MODIStsp)
 #  opts_file    <- system.file("testdata/test_MOD13A2.json", package = "MODIStsp")
 #  spatial_file <- system.file("testdata/lakeshapes/garda_lake.shp", package = "MODIStsp")
-#  MODIStsp(gui       = FALSE,
-#           opts_file = opts_file,
-#           spatmeth  = "file",
-#           spafile   = spatial_file,
-#           verbose   = FALSE)
+#  MODIStsp(
+#    gui = FALSE,
+#    opts_file = opts_file,
+#    spatmeth = "file",
+#    spafile = spatial_file,
+#    verbose = FALSE,
+#    parallel = FALSE
+#  )
 #  
 #  # --> Create a character array containing a list of shapefiles (or other spatial files)
 #  extent_list <- list.files(system.file("testdata/lakeshapes/", package = "MODIStsp"), full.names = TRUE, "\\.shp$")
@@ -127,11 +131,14 @@
 #  # each input spatial file).
 #  
 #  for (single_shape in extent_list) {
-#    MODIStsp(gui       = FALSE,
-#             opts_file = opts_file,
-#             spatmeth  = "file",
-#             spafile   = single_shape,
-#             verbose   = FALSE)
+#    MODIStsp(
+#      gui = FALSE,
+#      opts_file = opts_file,
+#      spatmeth = "file",
+#      spafile = single_shape,
+#      verbose = FALSE,
+#      parallel = FALSE
+#    )
 #  }
 #  
 #  # output files are placed in separate folders:
