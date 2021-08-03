@@ -131,14 +131,13 @@
 #' @importFrom tools file_path_sans_ext
 #' @importFrom utils unzip
 #' @examples
+#' \donttest{
 #'
 #' #' # - Running the tool using the GUI
 #' # Running the tool without any option will start the GUI with the default or
 #' # last used settings, in interactive mode (i.e., with gui = TRUE).
-#' \donttest{
 #' if (interactive()) {
 #'   MODIStsp()
-#' }
 #' }
 #'
 #'
@@ -155,7 +154,6 @@
 #' # Users can exploit multicore functionalities skipping to set this argument.
 #'
 #' MODIStsp_get_prodlayers("M*D13A2")
-#' \donttest{
 #' MODIStsp(
 #'   gui = FALSE,
 #'   out_folder = "$tempdir",
@@ -170,7 +168,6 @@
 #'   verbose = FALSE,
 #'   parallel = FALSE
 #' )
-#' }
 #'
 #'
 #' #' # - Running the tool using the settings previously saved in a specific options file
@@ -183,9 +180,8 @@
 #' # and retrieves NDVI and EVI data, plus the Usefulness Index Quality Indicator.
 #'
 #' opts_file <- system.file("testdata/test_MOD13A2.json", package = "MODIStsp")
-#' \donttest{
+#' 
 #' MODIStsp(gui = FALSE, opts_file = opts_file, verbose = TRUE, parallel = FALSE)
-#' }
 #'
 #'
 #' # Running the tool using the settings previously saved in a specific option file
@@ -194,7 +190,6 @@
 #'
 #' opts_file <- system.file("testdata/test_MOD13A2.json", package = "MODIStsp")
 #' spatial_file <- system.file("testdata/lakeshapes/garda_lake.shp", package = "MODIStsp")
-#' \donttest{
 #' MODIStsp(
 #'   gui = FALSE, 
 #'   opts_file = opts_file,
@@ -203,7 +198,6 @@
 #'   verbose = TRUE,
 #'   parallel = FALSE
 #' )
-#' }
 #'
 #'
 #' # Running the tool using the settings previously saved in a
@@ -220,7 +214,6 @@
 #' extent_list
 #' opts_file <- system.file("testdata/test_MOD13A2.json", package = "MODIStsp")
 #' 
-#' \donttest{
 #' for (single_shape in extent_list) {
 #'   MODIStsp(
 #'     gui = FALSE, 
@@ -229,7 +222,7 @@
 #'     spafile = single_shape, 
 #'     verbose = TRUE,
 #'     parallel = FALSE
-#'  )
+#'   )
 #' }
 #'
 #' # output files are placed in separate folders:
@@ -238,18 +231,22 @@
 #'   full.names = TRUE
 #' )
 #' outfiles_garda
-#' library(raster)
-#' plot(raster(outfiles_garda[1] ))
+#' require(raster)
+#' if (length(outfiles_garda) > 0) {
+#'   plot(raster(outfiles_garda[1] ))
+#' }
 #'
 #' outfiles_iseo <- list.files(
 #'   file.path(tempdir(), "MODIStsp/iseo_lake/VI_16Days_1Km_v6/NDVI"),
 #'   full.names = TRUE
 #' )
 #' outfiles_iseo
-#' plot(raster(outfiles_iseo[1]))
+#' if (length(outfiles_garda) > 0) {
+#'   plot(raster(outfiles_iseo[1]))
 #' }
 #'
 #' # See also https://docs.ropensci.org/MODIStsp/articles/noninteractive_execution.html
+#' }
 
 MODIStsp <- function(...,
                      gui             = TRUE,
@@ -461,6 +458,25 @@ MODIStsp <- function(...,
 
     if(!is.null(spatmeth)) {proc_opts$spatmeth  <- spatmeth}
 
+    if(!is.null(out_projsel)) {proc_opts$out_projsel  <- out_projsel}
+    if(!is.null(output_proj)) {proc_opts$output_proj  <- output_proj}
+    
+    if(!is.null(out_res_sel))  {proc_opts$out_res_sel  <- out_res_sel}
+    if(!is.null(out_res))      {proc_opts$out_res  <- out_res}
+    if(!is.null(resampling))  {proc_opts$resampling  <- resampling}
+    
+    if(!is.null(reprocess))  {proc_opts$reprocess  <- reprocess}
+    if(!is.null(delete_hdf))  {proc_opts$delete_hdf  <- delete_hdf}
+    if(!is.null(nodata_change)) {proc_opts$nodata_change  <- nodata_change}
+    if(!is.null(scale_val))  {proc_opts$scale_val  <- scale_val}
+    
+    if(!is.null(out_format)) {proc_opts$out_format  <- out_format}
+    if(!is.null(ts_format))  {proc_opts$ts_format  <- ts_format}
+    if(!is.null(compress))   {proc_opts$compress  <- compress}
+    
+    if(!is.null(out_folder))     {proc_opts$out_folder  <- out_folder}
+    if(!is.null(out_folder_mod)) {proc_opts$out_folder_mod  <- out_folder_mod}
+
     if (proc_opts$spatmeth == "tiles") {
       if(!is.null(start_x)) {proc_opts$start_x  <- start_x}
       if(!is.null(end_x))   {proc_opts$end_x    <- end_x}
@@ -476,9 +492,7 @@ MODIStsp <- function(...,
           proc_opts$start_y <- tiles[3]
           proc_opts$end_x  <- tiles[2]
           proc_opts$end_y  <- tiles[4]
-
         }
-
         #TODO update examples and website
       } else {
         if (proc_opts$spatmeth == "map") {
@@ -486,9 +500,8 @@ MODIStsp <- function(...,
         } else {
           if (proc_opts$spatmeth == "bbox") {
             #TODO retrieve tiles from selection
-            bbox  <- as.numeric(proc_opts$bbox)
-            proc_opts$bbox <- bbox
-            tiles <- tiles_from_bbox(bbox, proc_opts$output_proj)
+            if(!is.null(bbox)) {proc_opts$bbox  <- as.numeric(bbox)}
+            tiles <- tiles_from_bbox(proc_opts$bbox, proc_opts$output_proj)
             proc_opts$start_x <- tiles[1]
             proc_opts$start_y <- tiles[3]
             proc_opts$end_x  <- tiles[2]
@@ -498,24 +511,6 @@ MODIStsp <- function(...,
       }
     }
     # proc_opts$bbox <- as.numeric(proc_opts$bbox)
-    if(!is.null(out_projsel)) {proc_opts$out_projsel  <- out_projsel}
-    if(!is.null(output_proj)) {proc_opts$output_proj  <- output_proj}
-
-    if(!is.null(out_res_sel))  {proc_opts$out_res_sel  <- out_res_sel}
-    if(!is.null(out_res))      {proc_opts$out_res  <- out_res}
-    if(!is.null(resampling))  {proc_opts$resampling  <- resampling}
-
-    if(!is.null(reprocess))  {proc_opts$reprocess  <- reprocess}
-    if(!is.null(delete_hdf))  {proc_opts$delete_hdf  <- delete_hdf}
-    if(!is.null(nodata_change)) {proc_opts$nodata_change  <- nodata_change}
-    if(!is.null(scale_val))  {proc_opts$scale_val  <- scale_val}
-
-    if(!is.null(out_format)) {proc_opts$out_format  <- out_format}
-    if(!is.null(ts_format))  {proc_opts$ts_format  <- ts_format}
-    if(!is.null(compress))   {proc_opts$compress  <- compress}
-
-    if(!is.null(out_folder))     {proc_opts$out_folder  <- out_folder}
-    if(!is.null(out_folder_mod)) {proc_opts$out_folder_mod  <- out_folder_mod}
 
     if (proc_opts$out_folder == "$modistest") {
       warning(paste0(
@@ -538,6 +533,8 @@ MODIStsp <- function(...,
 
     if (proc_opts$out_folder_mod == "$tempdir") {
       proc_opts$out_folder_mod <- file.path(tempdir(), "MODIStsp/HDFs")
+      dir.create(dirname(proc_opts$out_folder_mod), showWarnings = FALSE)
+      dir.create(proc_opts$out_folder_mod, showWarnings = FALSE)
     }
 
     if (proc_opts$spatmeth == "file" & !missing(spafile)) {
@@ -545,6 +542,10 @@ MODIStsp <- function(...,
         proc_opts$out_folder,
         tools::file_path_sans_ext(basename(spafile))
       )
+    }
+    
+    if (inherits(proc_opts$bbox, "list")) {
+      proc_opts$bbox <- unlist(proc_opts$bbox)
     }
 
     # Create output folders if needed. No recursive to avoid creating big
