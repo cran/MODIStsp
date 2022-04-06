@@ -12,11 +12,23 @@
 
 <meta name="author" content="Lorenzo Busetto, Luigi Ranghetti (ranghetti.l@irea.cnr.it)" />
 
-<meta name="date" content="2021-08-03" />
+<meta name="date" content="2022-04-06" />
 
 <title>MODIStsp: A Tool for Automatic Preprocessing of MODIS Time Series - v2.0.5</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -26,6 +38,7 @@
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   ul.task-list{list-style: none;}
     </style>
+
 
 
 <style type="text/css">
@@ -149,7 +162,187 @@ div.csl-indent {
 }
 </style>
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -161,78 +354,156 @@ div.csl-indent {
 
 
 
-<h1 class="title toc-ignore">MODIStsp: A Tool for Automatic Preprocessing of MODIS Time Series - v2.0.5</h1>
+<h1 class="title toc-ignore">MODIStsp: A Tool for Automatic
+Preprocessing of MODIS Time Series - v2.0.5</h1>
 <h4 class="author">Lorenzo Busetto, Luigi Ranghetti (<a href="mailto:ranghetti.l@irea.cnr.it">ranghetti.l@irea.cnr.it</a>)</h4>
-<h4 class="date">2021-08-03</h4>
+<h4 class="date">2022-04-06</h4>
 
 
 
 <div id="introduction" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
-<p><code>{MODIStsp}</code> is an <code>R</code> package allowing to automatize the creation of time series of rasters derived from MODIS Land Products data. It allows performing several preprocessing steps on MODIS data available within a given time period.</p>
-<p>Development of <code>{MODIStsp}</code> started from modifications of the <code>ModisDownload</code> <code>R</code> script by Thomas Hengl <span class="citation">(2010)</span>, and successive adaptations by Babak Naimi <span class="citation">(2014)</span>. The basic functionalities for download and preprocessing of MODIS datasets provided by these scripts were gradually incremented with the aim of:</p>
+<p><code>{MODIStsp}</code> is an <code>R</code> package allowing to
+automatize the creation of time series of rasters derived from MODIS
+Land Products data. It allows performing several preprocessing steps on
+MODIS data available within a given time period.</p>
+<p>Development of <code>{MODIStsp}</code> started from modifications of
+the <code>ModisDownload</code> <code>R</code> script by Thomas Hengl
+<span class="citation">(2010)</span>, and successive adaptations by
+Babak Naimi <span class="citation">(2014)</span>. The basic
+functionalities for download and preprocessing of MODIS datasets
+provided by these scripts were gradually incremented with the aim
+of:</p>
 <ul>
-<li>developing a stand-alone application allowing to perform several preprocessing steps (e.g., download, mosaicing, reprojection and resize) on all available MODIS land products by exploiting a powerful and user-friendly GUI front-end;</li>
-<li>allowing the creation of time series of both MODIS original layers and additional Quality Indicators (e.g., data acquisition quality, cloud/snow presence, algorithm used for data production, etc. ) extracted from the aggregated bit-field QA layers;</li>
-<li>allowing the automatic calculation and creation of time series of several additional Spectral Indexes starting form MODIS surface reflectance products.</li>
+<li>developing a stand-alone application allowing to perform several
+preprocessing steps (e.g., download, mosaicing, reprojection and resize)
+on all available MODIS land products by exploiting a powerful and
+user-friendly GUI front-end;</li>
+<li>allowing the creation of time series of both MODIS original layers
+and additional Quality Indicators (e.g., data acquisition quality,
+cloud/snow presence, algorithm used for data production, etc. )
+extracted from the aggregated bit-field QA layers;</li>
+<li>allowing the automatic calculation and creation of time series of
+several additional Spectral Indexes starting form MODIS surface
+reflectance products.</li>
 </ul>
-<p>All processing parameters can be easily set with a user-friendly GUI, although non-interactive execution exploiting a previously created Options File is possible. Stand-alone execution outside an <code>R</code> environment is also possible, allowing to use scheduled execution of MODIStsp to automatically update time series related to a MODIS product and extent whenever a new image is available.</p>
-<p>Required MODIS HDF files are automatically downloaded from NASA servers and resized, reprojected, resampled and processed according to user’s choices. For each desired output layer, outputs are saved as single-band rasters corresponding to each acquisition date available for the selected MODIS product within the specified time period. “R” <em>RasterStack</em> objects with temporal information as well as Virtual raster files (GDAL vrt and ENVI META files) facilitating access to the entire time series can be also created.</p>
+<p>All processing parameters can be easily set with a user-friendly GUI,
+although non-interactive execution exploiting a previously created
+Options File is possible. Stand-alone execution outside an
+<code>R</code> environment is also possible, allowing to use scheduled
+execution of MODIStsp to automatically update time series related to a
+MODIS product and extent whenever a new image is available.</p>
+<p>Required MODIS HDF files are automatically downloaded from NASA
+servers and resized, reprojected, resampled and processed according to
+user’s choices. For each desired output layer, outputs are saved as
+single-band rasters corresponding to each acquisition date available for
+the selected MODIS product within the specified time period. “R”
+<em>RasterStack</em> objects with temporal information as well as
+Virtual raster files (GDAL vrt and ENVI META files) facilitating access
+to the entire time series can be also created.</p>
 </div>
 <div id="installation" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> Installation</h1>
 <p><code>{MODIStsp}</code> requires <a href="https://cran.r-project.org">R</a> v &gt;= 3.6.3.</p>
 <div id="on-windows" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> On Windows</h2>
-<p>You can install the stable version of <code>{MODIStsp}</code> from CRAN:</p>
+<p>You can install the stable version of <code>{MODIStsp}</code> from
+CRAN:</p>
 <p><code>install.packages(&quot;MODIStsp&quot;)</code></p>
-<p>, or the development version (containing the latest improvements and bug fixes) from GitHub:</p>
+<p>, or the development version (containing the latest improvements and
+bug fixes) from GitHub:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;remotes&quot;</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(remotes)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install_github</span>(<span class="st">&quot;ropensci/MODIStsp&quot;</span>)</span></code></pre></div>
 </div>
 <div id="on-linux-systems" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> On Linux systems</h2>
-<p>To install <code>{MODIStsp}</code> on Linux, you need to be able to install the <code>{sf}</code> package, which requires several dependencies. See <a href="https://github.com/r-spatial/sf#installing">here</a> if you have trouble installing <code>{sf}</code>.</p>
-<p>In addition, you need to install dependencies required by the <code>{protolite}</code> package, required by <code>{geojson}</code>. See <a href="https://github.com/jeroen/protolite/">here</a> for instructions on installing them.</p>
-<p>Then, you can install the stable version of <code>{MODIStsp}</code> from CRAN:</p>
+<p>To install <code>{MODIStsp}</code> on Linux, you need to be able to
+install the <code>{sf}</code> package, which requires several
+dependencies. See <a href="https://github.com/r-spatial/sf#installing">here</a> if you have
+trouble installing <code>{sf}</code>.</p>
+<p>In addition, you need to install dependencies required by the
+<code>{protolite}</code> package, required by <code>{geojson}</code>.
+See <a href="https://github.com/jeroen/protolite/">here</a> for
+instructions on installing them.</p>
+<p>Then, you can install the stable version of <code>{MODIStsp}</code>
+from CRAN:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;MODIStsp&quot;</span>)</span></code></pre></div>
-<p>, or the development version (containing the latest improvements and bug fixes) from GitHub:</p>
+<p>, or the development version (containing the latest improvements and
+bug fixes) from GitHub:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(devtools)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install_github</span>(<span class="st">&quot;ropensci/MODIStsp&quot;</span>)</span></code></pre></div>
 </div>
 <div id="on-mac-os" class="section level2" number="2.3">
 <h2><span class="header-section-number">2.3</span> On Mac OS</h2>
-<p>To install <code>{MODIStsp}</code> on MacOS, you need to be able to install the <code>{sf}</code> package, which requires several dependencies. See <a href="https://github.com/r-spatial/sf#installing">HERE</a> if you have trouble installing <code>{sf}</code>.</p>
-<p>Then, you can install the stable version of <code>{MODIStsp}</code> from CRAN:</p>
+<p>To install <code>{MODIStsp}</code> on MacOS, you need to be able to
+install the <code>{sf}</code> package, which requires several
+dependencies. See <a href="https://github.com/r-spatial/sf#installing">HERE</a> if you have
+trouble installing <code>{sf}</code>.</p>
+<p>Then, you can install the stable version of <code>{MODIStsp}</code>
+from CRAN:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;MODIStsp&quot;</span>)</span></code></pre></div>
-<p>, or the development version (containing the latest improvements and bug fixes) from GitHub:</p>
+<p>, or the development version (containing the latest improvements and
+bug fixes) from GitHub:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(devtools)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install_github</span>(<span class="st">&quot;ropensci/MODIStsp&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="running-the-tool-in-interactive-mode-the-modistsp-gui" class="section level1" number="3">
-<h1><span class="header-section-number">3</span> Running the tool in Interactive Mode: the MODIStsp GUI</h1>
-<p>The easiest way to use <code>{MODIStsp}</code> is to use its powerful GUI (Graphical User Interface) for selection of processing options, and then run the processing.</p>
-<p>To open the GUI, load the package and launch the MODIStsp function, with no parameters:</p>
+<h1><span class="header-section-number">3</span> Running the tool in
+Interactive Mode: the MODIStsp GUI</h1>
+<p>The easiest way to use <code>{MODIStsp}</code> is to use its powerful
+GUI (Graphical User Interface) for selection of processing options, and
+then run the processing.</p>
+<p>To open the GUI, load the package and launch the MODIStsp function,
+with no parameters:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MODIStsp)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">MODIStsp</span>()</span></code></pre></div>
-<p>This <strong>opens a GUI</strong> from which processing options can be specified and eventually saved (or loaded).</p>
-<p>The GUI allows selecting all processing options required for the creation of the desired MODIS time series. The main available processing options are described in detail in the following.</p>
+<p>This <strong>opens a GUI</strong> from which processing options can
+be specified and eventually saved (or loaded).</p>
+<p>The GUI allows selecting all processing options required for the
+creation of the desired MODIS time series. The main available processing
+options are described in detail in the following.</p>
 <p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
-<p>See (<a href="https://docs.ropensci.org/MODIStsp/articles/interactive_execution.html" class="uri">https://docs.ropensci.org/MODIStsp/articles/interactive_execution.html</a>) for further info and instructions regarding the usage of the GUI.</p>
+<p>See (<a href="https://docs.ropensci.org/MODIStsp/articles/interactive_execution.html" class="uri">https://docs.ropensci.org/MODIStsp/articles/interactive_execution.html</a>)
+for further info and instructions regarding the usage of the GUI.</p>
 </div>
 <div id="non-interactive-execution-from-within-r" class="section level1" number="4">
-<h1><span class="header-section-number">4</span> Non-Interactive Execution from within R</h1>
-<p><code>MODIStsp()</code> can be launched in non-interactive mode within an <code>R</code> session by setting the optional <code>GUI</code> parameter to FALSE, and either providing the desired processing argument in the call to the function, or providing a previously saved <code>opts_file</code> specifying the path to a JSON Options file previously saved through the GUI. This allows exploiting <code>{MODIStsp}</code> functionalities within generic <code>R</code> processing scripts.</p>
+<h1><span class="header-section-number">4</span> Non-Interactive
+Execution from within R</h1>
+<p><code>MODIStsp()</code> can be launched in non-interactive mode
+within an <code>R</code> session by setting the optional
+<code>GUI</code> parameter to FALSE, and either providing the desired
+processing argument in the call to the function, or providing a
+previously saved <code>opts_file</code> specifying the path to a JSON
+Options file previously saved through the GUI. This allows exploiting
+<code>{MODIStsp}</code> functionalities within generic <code>R</code>
+processing scripts.</p>
 <div id="specifying-the-processing-parameters-in-the-function-call" class="section level2" number="4.1">
-<h2><span class="header-section-number">4.1</span> <strong>Specifying the processing parameters in the function call</strong></h2>
-<p>All processing parameters can be set in the call to <code>MODIStsp()</code>. Mandatory parameters are <code>selprod</code> (specifying the MODIS product), (one of) <code>bandsel</code>, <code>quality_bandsel</code> or <code>indexes_bandsel</code>, (that specify the desired output layers), <code>out_folder</code> and <code>start_date</code> and <code>end_date</code>. <code>user</code> and <code>password</code> are also needed if <code>download_server</code> is not equal to <code>&quot;offline&quot;</code>.</p>
-<p>The function <code>MODIStsp_get_prodlayers()</code> allows to easily retrieve the names of products and available layers based on product code, such as in:</p>
+<h2><span class="header-section-number">4.1</span> <strong>Specifying
+the processing parameters in the function call</strong></h2>
+<p>All processing parameters can be set in the call to
+<code>MODIStsp()</code>. Mandatory parameters are <code>selprod</code>
+(specifying the MODIS product), (one of) <code>bandsel</code>,
+<code>quality_bandsel</code> or <code>indexes_bandsel</code>, (that
+specify the desired output layers), <code>out_folder</code> and
+<code>start_date</code> and <code>end_date</code>. <code>user</code> and
+<code>password</code> are also needed if <code>download_server</code> is
+not equal to <code>&quot;offline&quot;</code>.</p>
+<p>The function <code>MODIStsp_get_prodlayers()</code> allows to easily
+retrieve the names of products and available layers based on product
+code, such as in:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MODIStsp) </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">MODIStsp_get_prodlayers</span>(<span class="st">&quot;M*D13Q1&quot;</span>)</span></code></pre></div>
-<p>The other parameters are set automatically to default values (see <a href="https://docs.ropensci.org/MODIStsp/reference/MODIStsp_get_prodlayers.html">the function reference</a> for details on the different available function arguments).</p>
-<p>For example, the following code processes layers <strong>NDVI</strong> and <strong>EVI</strong> and quality indicator <strong>usefulness</strong> of product __M*D13Q1__, considering both Terra and Aqua platforms, for dates comprised between 2020-06-01 and 2020-06-15 and saves output to <code>R</code> <code>tempdir()</code>:</p>
+<p>The other parameters are set automatically to default values (see <a href="https://docs.ropensci.org/MODIStsp/reference/MODIStsp_get_prodlayers.html">the
+function reference</a> for details on the different available function
+arguments).</p>
+<p>For example, the following code processes layers
+<strong>NDVI</strong> and <strong>EVI</strong> and quality indicator
+<strong>usefulness</strong> of product __M*D13Q1__, considering both
+Terra and Aqua platforms, for dates comprised between 2020-06-01 and
+2020-06-15 and saves output to <code>R</code>
+<code>tempdir()</code>:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MODIStsp) </span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># **</span><span class="al">NOTE</span><span class="co">** Output files of examples are saved to file.path by setting out_folder to $tempdir.</span></span>
@@ -263,11 +534,16 @@ div.csl-indent {
 <span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(out_fold)</span>
 <span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="fu">file.path</span>(out_fold ,<span class="st">&quot;EVI&quot;</span>))</span>
 <span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="fu">file.path</span>(out_fold ,<span class="st">&quot;QA_usef&quot;</span>))</span></code></pre></div>
-<p><em>Note that this example, as well as the following ones, is run in single core to follow CRAN policies, by setting <code>parallel = FALSE</code>; users can exploit multicore functionalities skipping to set this argument.</em></p>
+<p><em>Note that this example, as well as the following ones, is run in
+single core to follow CRAN policies, by setting
+<code>parallel = FALSE</code>; users can exploit multicore
+functionalities skipping to set this argument.</em></p>
 </div>
 <div id="launching-modistsp-using-a-saved-options-file" class="section level2" number="4.2">
-<h2><span class="header-section-number">4.2</span> <strong>Launching MODIStsp using a saved “Options file”</strong></h2>
-<p>Alternatively, you can run <code>MODIStsp()</code> without opening the GUI by specifying a previously saved options file:</p>
+<h2><span class="header-section-number">4.2</span> <strong>Launching
+MODIStsp using a saved “Options file”</strong></h2>
+<p>Alternatively, you can run <code>MODIStsp()</code> without opening
+the GUI by specifying a previously saved options file:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MODIStsp) </span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># **</span><span class="al">NOTE</span><span class="co">** Output files of examples are saved to file.path(tempdir(), &quot;MODIStsp&quot;).</span></span>
@@ -289,8 +565,11 @@ div.csl-indent {
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(out_fold)</span>
 <span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="fu">file.path</span>(out_fold ,<span class="st">&quot;EVI&quot;</span>))</span></code></pre></div>
 <div id="looping-over-different-options-files" class="section level3" number="4.2.1">
-<h3><span class="header-section-number">4.2.1</span> <em>Looping over different Options files</em></h3>
-<p>If you need to process different MODIS products, you can prepare beforehand different MODIStsp options files by using the GUI, and then loop over them like this:</p>
+<h3><span class="header-section-number">4.2.1</span> <em>Looping over
+different Options files</em></h3>
+<p>If you need to process different MODIS products, you can prepare
+beforehand different MODIStsp options files by using the GUI, and then
+loop over them like this:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>opts_files <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">system.file</span>(<span class="st">&quot;testdata/test_MOD13A2.json&quot;</span>, <span class="at">package =</span> <span class="st">&quot;MODIStsp&quot;</span>), </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                <span class="fu">system.file</span>(<span class="st">&quot;testdata/test_MOD10A2.json&quot;</span>, <span class="at">package =</span> <span class="st">&quot;MODIStsp&quot;</span>))</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -310,12 +589,22 @@ div.csl-indent {
 </div>
 </div>
 <div id="specifying-the-processing-parameters-using-a-previously-saved-options-file-and-overwriting-some-parameters" class="section level2" number="4.3">
-<h2><span class="header-section-number">4.3</span> <strong>Specifying the processing parameters using a previously saved options file and overwriting some parameters</strong></h2>
-<p>Finally, it is possible to both specify a previously saved options file AND setting some parameters in the call to the function. This allows <strong>easily performing similar processings, by only updating the required arguments</strong>, as in the examples below.</p>
+<h2><span class="header-section-number">4.3</span> <strong>Specifying
+the processing parameters using a previously saved options file and
+overwriting some parameters</strong></h2>
+<p>Finally, it is possible to both specify a previously saved options
+file AND setting some parameters in the call to the function. This
+allows <strong>easily performing similar processings, by only updating
+the required arguments</strong>, as in the examples below.</p>
 </div>
 <div id="looping-over-different-spatial-extents" class="section level2" number="4.4">
-<h2><span class="header-section-number">4.4</span> <strong>Looping over different spatial extents</strong></h2>
-<p>Specifying the <code>spafile</code> parameter while setting the <code>spatmeth</code> parameter to <code>&quot;file&quot;</code> overrides for example the output extent of the selected Options File. This allows performing the same preprocessing on different extents using a single Options File. For example:</p>
+<h2><span class="header-section-number">4.4</span> <strong>Looping over
+different spatial extents</strong></h2>
+<p>Specifying the <code>spafile</code> parameter while setting the
+<code>spatmeth</code> parameter to <code>&quot;file&quot;</code> overrides for
+example the output extent of the selected Options File. This allows
+performing the same preprocessing on different extents using a single
+Options File. For example:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the tool using the settings previously saved in a specific option file</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># and specifying the extent from a spatial file allows to re-use the same</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># processing settings to perform download and reprocessing on a different area</span></span>
@@ -370,79 +659,150 @@ div.csl-indent {
 </div>
 </div>
 <div id="scheduled-processing" class="section level1" number="5">
-<h1><span class="header-section-number">5</span> Scheduled Processing</h1>
-<p>Stand-alone non-interactive execution can be used to periodically and automatically update the time series of a selected product over a given study area. To do that, you should simply:</p>
+<h1><span class="header-section-number">5</span> Scheduled
+Processing</h1>
+<p>Stand-alone non-interactive execution can be used to periodically and
+automatically update the time series of a selected product over a given
+study area. To do that, you should simply:</p>
 <ol style="list-style-type: decimal">
-<li><p>Open the <code>{MODIStsp}</code> GUI, define the parameters of the processing specifying a date in the future as the “Ending Date” and save the processing options. Then quit the program.</p></li>
-<li><p>Schedule non-interactive execution of the launcher installed as seen before (or located in the subdirectory <code>&quot;MODIStsp/ExtData/Launcher&quot;</code> of your library path) as windows scheduled task (or linux “cron” job) according to a specified time schedule, specifying the path of a previously saved Options file as additional argument.</p></li>
+<li><p>Open the <code>{MODIStsp}</code> GUI, define the parameters of
+the processing specifying a date in the future as the “Ending Date” and
+save the processing options. Then quit the program.</p></li>
+<li><p>Schedule non-interactive execution of the launcher installed as
+seen before (or located in the subdirectory
+<code>&quot;MODIStsp/ExtData/Launcher&quot;</code> of your library path) as
+windows scheduled task (or linux “cron” job) according to a specified
+time schedule, specifying the path of a previously saved Options file as
+additional argument.</p></li>
 </ol>
 <div id="on-linux" class="section level4" number="5.0.0.1">
 <h4><span class="header-section-number">5.0.0.1</span> On Linux</h4>
 <ol start="3" style="list-style-type: decimal">
 <li>Edit your crontab by opening a terminal and type:</li>
 </ol>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">crontab</span> <span class="at">-e</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">crontab</span> <span class="at">-e</span></span></code></pre></div>
 <ol start="4" style="list-style-type: decimal">
-<li>Add an entry for the launcher. For example, if you have installed it in <code>/usr/bin</code> and you want to run the tool every day at 23.00, add the following row:</li>
+<li>Add an entry for the launcher. For example, if you have installed it
+in <code>/usr/bin</code> and you want to run the tool every day at
+23.00, add the following row:</li>
 </ol>
 <div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">0</span> 23 <span class="pp">*</span> <span class="pp">*</span> <span class="pp">*</span> /bin/bash /usr/bin/MODIStsp <span class="at">-g</span> <span class="at">-s</span> <span class="st">&quot;/yourpath/youroptions.json&quot;</span></span></code></pre></div>
 </div>
 <div id="on-windows-1" class="section level4" number="5.0.0.2">
 <h4><span class="header-section-number">5.0.0.2</span> On Windows</h4>
 <ol start="3" style="list-style-type: decimal">
-<li>Create a Task following <a href="https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc748993(v=ws.11)?redirectedfrom=MSDN" target="_blank">these instructions</a>; add the path of the <code>MODIStsp.bat</code> launcher as Action (point 6), and specifying <code>-g -s &quot;X:/yourpath/youroptions.json&quot;</code> as argument.</li>
+<li>Create a Task following
+<a href="https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc748993(v=ws.11)?redirectedfrom=MSDN" target="_blank">these
+instructions</a>; add the path of the <code>MODIStsp.bat</code> launcher
+as Action (point 6), and specifying
+<code>-g -s &quot;X:/yourpath/youroptions.json&quot;</code> as argument.</li>
 </ol>
 </div>
 </div>
 <div id="outputs-format-and-naming-conventions" class="section level1" number="6">
-<h1><span class="header-section-number">6</span> Outputs Format and Naming Conventions</h1>
+<h1><span class="header-section-number">6</span> Outputs Format and
+Naming Conventions</h1>
 <div id="single-band-outputs" class="section level2" number="6.1">
-<h2><span class="header-section-number">6.1</span> Single-band outputs</h2>
-<p>Output raster files are saved in specific subfolders of the main output folder. In particular, <strong>a separate subfolder</strong> is created for each processed original MODIS layer, Quality Indicator or Spectral Index. Each subfolder contains one image for each processed date, created according to the following naming conventions:</p>
+<h2><span class="header-section-number">6.1</span> Single-band
+outputs</h2>
+<p>Output raster files are saved in specific subfolders of the main
+output folder. In particular, <strong>a separate subfolder</strong> is
+created for each processed original MODIS layer, Quality Indicator or
+Spectral Index. Each subfolder contains one image for each processed
+date, created according to the following naming conventions:</p>
 <pre><code>myoutfolder/&quot;Layer&quot;/&quot;ProdCode&quot;_&quot;Layer&quot;_&quot;YYYY&quot;_&quot;DOY&quot;.&quot;ext&quot;</code></pre>
-<p><font size="2"> <em>(e.g., myoutfolder/NDVI/MOD13Q1_NDVI_2000_065.dat)</em> </font></p>
+<p><font size="2"> <em>(e.g.,
+myoutfolder/NDVI/MOD13Q1_NDVI_2000_065.dat)</em> </font></p>
 <p>, where:</p>
 <ul>
-<li><strong><em>Layer</em></strong> is a short name describing the dataset (e.g., b1_Red, NDII, UI);</li>
-<li><strong><em>ProdCode</em></strong> is the code name of the MODIS product from which the image was derived (e.g., MOD13Q1);</li>
-<li><strong><em>YYYY</em></strong> and <strong><em>DOY</em></strong> correspond to the year and DOY (Day of the Year) of acquisition of the original MODIS image;</li>
-<li><strong><em>ext</em></strong> is the file extension (.tif for GTiff outputs, or .dat for ENVI outputs).</li>
+<li><strong><em>Layer</em></strong> is a short name describing the
+dataset (e.g., b1_Red, NDII, UI);</li>
+<li><strong><em>ProdCode</em></strong> is the code name of the MODIS
+product from which the image was derived (e.g., MOD13Q1);</li>
+<li><strong><em>YYYY</em></strong> and <strong><em>DOY</em></strong>
+correspond to the year and DOY (Day of the Year) of acquisition of the
+original MODIS image;</li>
+<li><strong><em>ext</em></strong> is the file extension (.tif for GTiff
+outputs, or .dat for ENVI outputs).</li>
 </ul>
 <hr />
 </div>
 <div id="virtual-multi-band-outputs" class="section level2" number="6.2">
-<h2><span class="header-section-number">6.2</span> Virtual multi-band outputs</h2>
-<p>ENVI and/or GDAL virtual time series files and <em>RasterStack</em> RData objects are instead stored <strong>in the “Time_Series” subfolder</strong> if required.</p>
+<h2><span class="header-section-number">6.2</span> Virtual multi-band
+outputs</h2>
+<p>ENVI and/or GDAL virtual time series files and <em>RasterStack</em>
+RData objects are instead stored <strong>in the “Time_Series”
+subfolder</strong> if required.</p>
 <p>Naming convention for these files is as follow:</p>
 <pre><code>&lt;path_of_out_folder&gt;/Time_Series/&lt;vrt_type&gt;/&lt;Sensor&gt;/&lt;Layer&gt;/&lt;ProdCode&gt;_&lt;Layer&gt;_&lt;StartDOY&gt;_&lt;StartYear&gt;_&lt;EndDOY&gt;_&lt;EndYear&gt;_&lt;suffix&gt;.&lt;ext&gt; </code></pre>
-<p><font size="2"> <em>(e.g., <code>/my/out/folder/Time_Series/RData/Terra/NDVI/MOD13Q1_MYD13Q1_NDVI_49_2000_353_2015_RData.RData</code>)</em> </font></p>
+<p><font size="2"> <em>(e.g.,
+<code>/my/out/folder/Time_Series/RData/Terra/NDVI/MOD13Q1_MYD13Q1_NDVI_49_2000_353_2015_RData.RData</code>)</em>
+</font></p>
 <p>, where:</p>
 <ul>
-<li><code>&lt;vrt_type&gt;</code> indicates the type of virtual file (<code>&quot;RData&quot;</code>, <code>&quot;GDAL&quot;</code> or <code>&quot;ENVI_META&quot;</code>);</li>
-<li><code>&lt;Sensor&gt;</code> indicates to which MODIS sensor the time series belongs (<code>&quot;Terra&quot;</code>, <code>&quot;Aqua&quot;</code>, <code>&quot;Mixed&quot;</code> or <code>&quot;Combined&quot;</code> (for MCD* products));</li>
-<li><code>&lt;Layer&gt;</code> is a short name describing the dataset (e.g., <code>&quot;b1_Red&quot;</code>, <code>&quot;NDII&quot;</code>, <code>&quot;UI&quot;</code>);</li>
-<li><code>&lt;ProdCode&gt;</code> is the code name of the MODIS product from which the image was derived (e.g., <code>&quot;MOD13Q1&quot;</code>);</li>
-<li><code>&lt;StartDOY&gt;</code>, <code>&lt;StartYear&gt;</code>, <code>&lt;EndDOY&gt;</code> and <code>&lt;EndYear&gt;</code> indicate the temporal extent of the time serie created;</li>
-<li><code>&lt;suffix&gt;</code> indicates the type of virtual file (<code>&quot;ENVI&quot;</code>, <code>&quot;GDAL&quot;</code> or <code>&quot;RData&quot;</code>);</li>
-<li><code>&lt;ext&gt;</code> is the file extension (<code>&quot;.vrt&quot;</code> for GDAL virtual files, <code>&quot;META&quot;</code> for ENVI meta files or <code>&quot;RData&quot;</code> for <code>R</code> raster stacks).</li>
+<li><code>&lt;vrt_type&gt;</code> indicates the type of virtual file
+(<code>&quot;RData&quot;</code>, <code>&quot;GDAL&quot;</code> or
+<code>&quot;ENVI_META&quot;</code>);</li>
+<li><code>&lt;Sensor&gt;</code> indicates to which MODIS sensor the time
+series belongs (<code>&quot;Terra&quot;</code>, <code>&quot;Aqua&quot;</code>,
+<code>&quot;Mixed&quot;</code> or <code>&quot;Combined&quot;</code> (for MCD*
+products));</li>
+<li><code>&lt;Layer&gt;</code> is a short name describing the dataset
+(e.g., <code>&quot;b1_Red&quot;</code>, <code>&quot;NDII&quot;</code>,
+<code>&quot;UI&quot;</code>);</li>
+<li><code>&lt;ProdCode&gt;</code> is the code name of the MODIS product
+from which the image was derived (e.g., <code>&quot;MOD13Q1&quot;</code>);</li>
+<li><code>&lt;StartDOY&gt;</code>, <code>&lt;StartYear&gt;</code>,
+<code>&lt;EndDOY&gt;</code> and <code>&lt;EndYear&gt;</code> indicate
+the temporal extent of the time serie created;</li>
+<li><code>&lt;suffix&gt;</code> indicates the type of virtual file
+(<code>&quot;ENVI&quot;</code>, <code>&quot;GDAL&quot;</code> or <code>&quot;RData&quot;</code>);</li>
+<li><code>&lt;ext&gt;</code> is the file extension (<code>&quot;.vrt&quot;</code>
+for GDAL virtual files, <code>&quot;META&quot;</code> for ENVI meta files or
+<code>&quot;RData&quot;</code> for <code>R</code> raster stacks).</li>
 </ul>
 </div>
 </div>
 <div id="accessing-the-processed-time-series-from-r" class="section level1" number="7">
-<h1><span class="header-section-number">7</span> Accessing the processed time series from R</h1>
-<p>Preprocessed MODIS data can be retrieved within <code>R</code> either by accessing the single-date raster files, or by loading the saved <em>RasterStack</em> objects.</p>
-<p>Any single-date image can be accessed by simply opening it with a <code>raster</code> command:</p>
+<h1><span class="header-section-number">7</span> Accessing the processed
+time series from R</h1>
+<p>Preprocessed MODIS data can be retrieved within <code>R</code> either
+by accessing the single-date raster files, or by loading the saved
+<em>RasterStack</em> objects.</p>
+<p>Any single-date image can be accessed by simply opening it with a
+<code>raster</code> command:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(raster)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>modistsp_file <span class="ot">&lt;-</span> <span class="st">&quot;/my_outfolder/EVI/MOD13Q1_2005_137_EVI.tif&quot;</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>my_raster <span class="ot">&lt;-</span> <span class="fu">raster</span>(modistsp_file)</span></code></pre></div>
-<p><code>rasterStack</code> time series containing all the processed data for a given parameter (saved in the <code>&quot;Time Series/RData&quot;</code> subfolder - see <a href="https://docs.ropensci.org/MODIStsp/articles/output.html">here</a> for details) can be opened by:</p>
+<p><code>rasterStack</code> time series containing all the processed
+data for a given parameter (saved in the
+<code>&quot;Time Series/RData&quot;</code> subfolder - see <a href="https://docs.ropensci.org/MODIStsp/articles/output.html">here</a>
+for details) can be opened by:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>in_virtual_file <span class="ot">&lt;-</span> <span class="st">&quot;/my_outfolder/Time_Series/RData/Terra/EVI/MOD13Q1_MYD13Q1_NDVI_49_2000_353_2015_RData.RData&quot;</span> </span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>indata          <span class="ot">&lt;-</span> <span class="fu">get</span>(<span class="fu">load</span>(in_virtual_file))</span></code></pre></div>
-<p>This second option allows accessing the complete data stack and analyzing it using the functionalities for raster/raster time series analysis, extraction and plotting provided for example by the <code>{raster}</code> or <code>{rasterVis}</code> packages.</p>
+<p>This second option allows accessing the complete data stack and
+analyzing it using the functionalities for raster/raster time series
+analysis, extraction and plotting provided for example by the
+<code>{raster}</code> or <code>{rasterVis}</code> packages.</p>
 <div id="extracting-time-series-data-on-areas-of-interest" class="section level2" number="7.1">
-<h2><span class="header-section-number">7.1</span> Extracting Time Series Data on Areas of Interest</h2>
-<p><code>{MODIStsp}</code> provides an efficient function (<code>MODIStsp_extract()</code>) for extracting time series data at specific locations. The function takes as input a <em>RasterStack</em> virtual object created by <code>MODIStsp()</code> (see above), the starting and ending dates for the extraction and a standard _Sp*_ object (or an ESRI shapefile name) specifying the locations (points, lines or polygons) of interest, and provides as output a <code>xts</code> object or <code>data.frame</code> containing time series data for those locations.</p>
-<p>If the input is of class <em>SpatialPoints</em>, the output object contains one column for each point specified, and one row for each date. If it is of class <em>SpatialPolygons</em> (or <em>SpatialLines</em>), it contains one column for each polygon (or each line), with values obtained applying the function specified as the <code>FUN</code> argument (e.g., mean, standard deviation, etc.) on pixels belonging to the polygon (or touched by the line), and one row for each date.</p>
+<h2><span class="header-section-number">7.1</span> Extracting Time
+Series Data on Areas of Interest</h2>
+<p><code>{MODIStsp}</code> provides an efficient function
+(<code>MODIStsp_extract()</code>) for extracting time series data at
+specific locations. The function takes as input a <em>RasterStack</em>
+virtual object created by <code>MODIStsp()</code> (see above), the
+starting and ending dates for the extraction and a standard _Sp*_ object
+(or an ESRI shapefile name) specifying the locations (points, lines or
+polygons) of interest, and provides as output a <code>xts</code> object
+or <code>data.frame</code> containing time series data for those
+locations.</p>
+<p>If the input is of class <em>SpatialPoints</em>, the output object
+contains one column for each point specified, and one row for each date.
+If it is of class <em>SpatialPolygons</em> (or <em>SpatialLines</em>),
+it contains one column for each polygon (or each line), with values
+obtained applying the function specified as the <code>FUN</code>
+argument (e.g., mean, standard deviation, etc.) on pixels belonging to
+the polygon (or touched by the line), and one row for each date.</p>
 <p>As an example the following code:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Set the input paths to raster and shape file</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  infile    <span class="ot">&lt;-</span> <span class="st">&#39;myoutfolder/Time_Series/RData/Mixed/MOD13Q1_MYD13Q1_NDVI_49_2000_353_2015_RData.RData&#39;</span>  </span>
@@ -457,27 +817,37 @@ div.csl-indent {
 <span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  datasd    <span class="ot">&lt;-</span> <span class="fu">MODIStsp_extract</span> (inrts, shpname, startdate, enddate, <span class="at">FUN =</span> <span class="st">&#39;sd&#39;</span>, <span class="at">na.rm =</span> T)</span>
 <span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot average time series for the polygons</span></span>
 <span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot.xts</span>(dataavg) </span></code></pre></div>
-<p>loads a <em>RasterStack</em> object containing 8-days 250 m resolution time series for the 2000-2015 period and extracts time series of average and standard deviation values over the different polygons of a user’s selected shapefile on the 2010-2014 period.</p>
+<p>loads a <em>RasterStack</em> object containing 8-days 250 m
+resolution time series for the 2000-2015 period and extracts time series
+of average and standard deviation values over the different polygons of
+a user’s selected shapefile on the 2010-2014 period.</p>
 </div>
 </div>
 <div id="problems-and-issues" class="section level1" number="8">
-<h1><span class="header-section-number">8</span> Problems and Issues</h1>
-<p>Solutions to some common <strong>installation and processing problems</strong> can be found in <code>{MODIStsp}</code> FAQ: <a href="https://docs.ropensci.org/MODIStsp/articles/faq.html" class="uri">https://docs.ropensci.org/MODIStsp/articles/faq.html</a></p>
-<p>Please <strong>report any issues</strong> you may encounter in our issues page on GitHub: <a href="https://github.com/ropensci/MODIStsp/issues" class="uri">https://github.com/ropensci/MODIStsp/issues</a></p>
+<h1><span class="header-section-number">8</span> Problems and
+Issues</h1>
+<p>Solutions to some common <strong>installation and processing
+problems</strong> can be found in <code>{MODIStsp}</code> FAQ: <a href="https://docs.ropensci.org/MODIStsp/articles/faq.html" class="uri">https://docs.ropensci.org/MODIStsp/articles/faq.html</a></p>
+<p>Please <strong>report any issues</strong> you may encounter in our
+issues page on GitHub: <a href="https://github.com/ropensci/MODIStsp/issues" class="uri">https://github.com/ropensci/MODIStsp/issues</a></p>
 </div>
 <div id="citation" class="section level1" number="9">
 <h1><span class="header-section-number">9</span> Citation</h1>
 <p>To cite MODIStsp please use:</p>
-<p>L. Busetto, L. Ranghetti (2016) MODIStsp: An R package for automatic preprocessing of MODIS Land Products time series, Computers &amp; Geosciences, Volume 97, Pages 40-48, ISSN 0098-3004, <a href="https://doi.org/10.1016/j.cageo.2016.08.020" class="uri">https://doi.org/10.1016/j.cageo.2016.08.020</a>, URL: <a href="https://github.com/ropensci/MODIStsp" class="uri">https://github.com/ropensci/MODIStsp</a>.</p>
+<p>L. Busetto, L. Ranghetti (2016) MODIStsp: An R package for automatic
+preprocessing of MODIS Land Products time series, Computers &amp;
+Geosciences, Volume 97, Pages 40-48, ISSN 0098-3004, <a href="https://doi.org/10.1016/j.cageo.2016.08.020" class="uri">https://doi.org/10.1016/j.cageo.2016.08.020</a>, URL: <a href="https://github.com/ropensci/MODIStsp" class="uri">https://github.com/ropensci/MODIStsp</a>.</p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="unnumbered">References</h1>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-Hengl2010" class="csl-entry">
-Hengl, T. 2010. <span>“<span class="nocase">Download and resampling of MODIS images</span>.”</span> <a href="https://en.wikipedia.org/wiki/Regression-kriging?title=Download_and_resampling_of_MODIS_images">https://en.wikipedia.org/wiki/Regression-kriging?title=Download_and_resampling_of_MODIS_images</a>.
+Hengl, T. 2010. <span>“<span class="nocase">Download and resampling of
+MODIS images</span>.”</span> <a href="https://en.wikipedia.org/wiki/Regression-kriging?title=Download_and_resampling_of_MODIS_images">https://en.wikipedia.org/wiki/Regression-kriging?title=Download_and_resampling_of_MODIS_images</a>.
 </div>
 <div id="ref-Naimi2014" class="csl-entry">
-Naimi, B. 2014. <span>“<span class="nocase">ModisDownload: an R function to download, mosaic, and reproject the MODIS images</span>.”</span> <a href="http://r-gis.net/?q=ModisDownload">http://r-gis.net/?q=ModisDownload</a>.
+Naimi, B. 2014. <span>“<span class="nocase">ModisDownload: an R function
+to download, mosaic, and reproject the MODIS images</span>.”</span> <a href="http://r-gis.net/?q=ModisDownload">http://r-gis.net/?q=ModisDownload</a>.
 </div>
 </div>
 </div>

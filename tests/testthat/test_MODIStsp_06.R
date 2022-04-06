@@ -4,7 +4,7 @@
 #   After reprojection in geographic coordinates, output files are exported
 #   as GeoTiff (scaling output values) and vrt time series are created.
 
-context("MODIStsp Test 6: http download on \"combined\" datasets and mosaicing of MODIS tiles") #nolint
+message("MODIStsp Test 6: http download on \"combined\" datasets and mosaicing of MODIS tiles") #nolint
 test_that(
   "Tests on MODIStsp", {
     skip_on_cran()
@@ -12,7 +12,7 @@ test_that(
 
     MODIStsp(test = 6)
     out_files_dat <- list.files(
-      file.path(tempdir(), "MODIStsp/LAI_8Days_500m_v6"),
+      file.path(tempdir(), "MODIStsp/LAI_8Days_500m_v61"),
       pattern = "\\.tif$", recursive = TRUE, full.names = TRUE)
     file_sizes_dat <- file.info(out_files_dat)$size
     # expect_equal(file_sizes_dat, c(1663, 1636))
@@ -22,14 +22,14 @@ test_that(
                mean(suppressWarnings(raster::getValues(raster::raster(x))), na.rm = T)
              })
     )
-    expect_equal(means, c(145.7023 , 145.6939), tolerance = 0.001, scale = 1)
+    expect_equal(means, c(145.8004, 145.7715), tolerance = 0.001, scale = 1)
     r <- raster::raster(out_files_dat[1])
     expect_true(sf::st_is_longlat(st_crs(r)))
     expect_equal(raster::res(r), c(0.01, 0.01), tolerance = 0.001, scale = 1)
     # re-run with same parameterization. Since Reprocess = "No", the
     # auto-skipping of already processed dates kicks-in in this case, leading
     # the process to be very quick (Only MODIStso_vrt_create needs to run. )
-    context("MODIStsp Test 6: No Reprocessing works as expected")
+    message("MODIStsp Test 6: No Reprocessing works as expected")
     t1 <- Sys.time()
     MODIStsp(test = 6)
     tt <- Sys.time() - t1
@@ -38,7 +38,7 @@ test_that(
 
     # re-run with same parameterization but nodata_chage to true to see
     # that nodata_change is ok when scale_val is true and multiple nodata
-    context("MODIStsp Test 6: multiple nodata and nodata_change")
+    message("MODIStsp Test 6: multiple nodata and nodata_change")
     MODIStsp(test = "06a")
     means <- unlist(
       lapply(out_files_dat,
@@ -46,7 +46,7 @@ test_that(
                mean(raster::getValues(suppressWarnings(raster::raster(x))), na.rm = T)
              })
     )
-    expect_equal(means, c(1.086066 , 1.066393), tolerance = 0.001, scale = 1)
+    expect_equal(means, c(1.315164, 1.247541), tolerance = 0.001, scale = 1)
     unlink(out_files_dat)
   }
 )
