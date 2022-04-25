@@ -1,7 +1,7 @@
 Package: MODIStsp
 Title: Find, Download and Process MODIS Land Products Data
 Type: Package
-Version: 2.0.7
+Version: 2.0.8
 Authors@R: c(person("Lorenzo", "Busetto", 
                  role = c("aut"),
                  comment = c(ORCID = '0000-0001-9634-6038')),
@@ -49,7 +49,8 @@ Suggests: dplyr, DT, formatR, geojsonlint, ggplot2, grid, httptest,
         0.6.0), png, rappdirs, rgdal, rmarkdown, shiny, shinyalert,
         shinydashboard, shinyFiles (>= 0.9.0), shinyjs, spelling,
         testthat, tibble, tibbletime, tidyr, qpdf, xtable
-SystemRequirements:
+SystemRequirements: GDAL (>= 2.1.2) with support for HDF4 format, PROJ
+        (>= 4.9.1).
 URL: https://github.com/ropensci/MODIStsp/,
         https://docs.ropensci.org/MODIStsp/
 BugReports: https://github.com/ropensci/MODIStsp/issues
@@ -58,7 +59,7 @@ RoxygenNote: 7.1.2
 Encoding: UTF-8
 Language: en-US
 NeedsCompilation: no
-Packaged: 2022-04-06 15:06:56 UTC; lranghetti
+Packaged: 2022-04-21 13:52:13 UTC; lranghetti
 Author: Lorenzo Busetto [aut] (<https://orcid.org/0000-0001-9634-6038>),
   Luigi Ranghetti [aut, cre] (<https://orcid.org/0000-0001-6207-5188>),
   Leah Wasser [rev] (Leah Wasser reviewed the package for rOpenSci, see
@@ -69,4 +70,4 @@ Author: Lorenzo Busetto [aut] (<https://orcid.org/0000-0001-9634-6038>),
     which some MODIStsp internal functions are based)
 Maintainer: Luigi Ranghetti <luigi@ranghetti.info>
 Repository: CRAN
-Date/Publication: 2022-04-06 15:52:28 UTC
+Date/Publication: 2022-04-25 09:20:02 UTC
