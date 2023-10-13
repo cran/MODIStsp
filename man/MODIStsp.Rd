@@ -69,10 +69,10 @@ a list of available product names using function \code{MODIStsp_get_prodnames},
 Default: NULL}
 
 \item{prod_version}{Version of the selected MODIS product.
-Currently versions \code{"006"} and/or \code{"061"} can be chosen.
-Default value is \code{"006"} until decommission of this version will be
-announced by USGS.
-Products with version \verb{"061} are experimental: in case users would encounter
+Currently versions \code{"061"} and/or \code{"006"} can be chosen.
+Default value is \code{"061"} (version \code{"006"} was decommissioned by USGS on
+July 31, 2023, products of this version are being gradually removed).
+In case users would encounter
 an error in the encoding of bands or quality flags they are encouraged
 to report it by opening a new issue on GitHub at
 \url{https://github.com/ropensci/MODIStsp/issues}.}
@@ -332,7 +332,7 @@ if (is_hdf4_supported) {
 
 # output files are placed in separate folders:
 outfiles_garda <- list.files(
-  file.path(tempdir(), "MODIStsp/garda_lake/VI_16Days_1Km_v6/NDVI"),
+  file.path(tempdir(), "MODIStsp/garda_lake/VI_16Days_1Km_v61/NDVI"),
   full.names = TRUE
 )
 outfiles_garda
@@ -342,7 +342,7 @@ if (length(outfiles_garda) > 0) {
 }
 
 outfiles_iseo <- list.files(
-  file.path(tempdir(), "MODIStsp/iseo_lake/VI_16Days_1Km_v6/NDVI"),
+  file.path(tempdir(), "MODIStsp/iseo_lake/VI_16Days_1Km_v61/NDVI"),
   full.names = TRUE
 )
 outfiles_iseo

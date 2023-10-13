@@ -56,10 +56,10 @@
 #    parallel        = FALSE
 #  )
 #  
-#  # Outputs are in this case in subfolder "MODIStsp/VI_16Days_1Km_v6" of
+#  # Outputs are in this case in subfolder "MODIStsp/VI_16Days_1Km_v61" of
 #  # `base::tempdir()`:
 #  
-#  out_fold <- file.path(tempdir(), "MODIStsp/VI_16Days_1Km_v6/")
+#  out_fold <- file.path(tempdir(), "MODIStsp/VI_16Days_1Km_v61/")
 #  list.files(out_fold)
 #  list.files(file.path(out_fold ,"EVI"))
 #  list.files(file.path(out_fold ,"QA_usef"))
@@ -79,10 +79,10 @@
 #  # --> Launch the processing
 #  MODIStsp(gui = FALSE, opts_file = opts_file, verbose = FALSE, parallel = FALSE)
 #  
-#  # Outputs are in this case in subfolder "MODIStsp/VI_16Days_1Km_v6" of
+#  # Outputs are in this case in subfolder "MODIStsp/VI_16Days_1Km_v61" of
 #  # tempdir():
 #  
-#  out_fold <- file.path(tempdir(), "MODIStsp/VI_16Days_1Km_v6")
+#  out_fold <- file.path(tempdir(), "MODIStsp/VI_16Days_1Km_v61")
 #  list.files(out_fold)
 #  list.files(file.path(out_fold ,"EVI"))
 
@@ -96,12 +96,12 @@
 #  }
 #  
 #  # MOD13A2 ouptuts
-#  out_fold <- file.path(tempdir(), "MODIStsp/VI_16Days_1Km_v6")
+#  out_fold <- file.path(tempdir(), "MODIStsp/VI_16Days_1Km_v61")
 #  list.files(out_fold)
 #  list.files(file.path(out_fold ,"NDVI"))
 #  
 #  # MOD10A2 ouptuts
-#  out_fold <- file.path(tempdir(), "MODIStsp/Surf_Temp_8Days_1Km_v6")
+#  out_fold <- file.path(tempdir(), "MODIStsp/Surf_Temp_8Days_1Km_v61")
 #  list.files(out_fold)
 #  list.files(file.path(out_fold ,"LST_Night_1km"))
 
@@ -144,7 +144,7 @@
 #  # output files are placed in separate folders:
 #  
 #  outfiles_garda <- list.files(
-#    file.path(tempdir(), "MODIStsp/garda_lake/VI_16Days_1Km_v6/EVI"),
+#    file.path(tempdir(), "MODIStsp/garda_lake/VI_16Days_1Km_v61/EVI"),
 #    full.names = TRUE)
 #  outfiles_garda
 #  
@@ -152,7 +152,7 @@
 #  plot(raster(outfiles_garda[1]))
 #  
 #  outfiles_iseo <- list.files(
-#    file.path(tempdir(), "MODIStsp/iseo_lake/VI_16Days_1Km_v6/EVI"),
+#    file.path(tempdir(), "MODIStsp/iseo_lake/VI_16Days_1Km_v61/EVI"),
 #    full.names = TRUE)
 #  outfiles_iseo
 #  
